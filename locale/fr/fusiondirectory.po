@@ -1,0 +1,19 @@
+# Traduction of urbackup plugin.
+# Copyright (C) YEAR FusionDirectory Project
+# This file is distributed under the same license as the FusionDirectory package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Antoine Gallavardin <antoine.gallavardin@freee.fr>, 2021
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: FusionDirectory VERSION\n"
+"POT-Creation-Date: 2021-02-12 17:03+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
