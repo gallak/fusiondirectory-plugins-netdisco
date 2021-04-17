@@ -64,10 +64,12 @@ class netdiscoNode extends simplePlugin
             }
         }
     }
+    array_shift($arrayNodeInfo);
     $this->fdNetdiscoTrace = $arrayNodeInfo;
   }
 
   public function displayNode ($deviceInfo){
+
 
     $netdiscoData = new netdiscoDataRenderer();
     $arrayDiv=array();
