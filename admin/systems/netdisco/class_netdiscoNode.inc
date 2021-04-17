@@ -20,6 +20,7 @@
 
 
 require_once("netdisco/class_netdisco.php");
+require_once("netdisco/class_netdiscoDataRenderer.php");
 
 
 class netdiscoNode extends simplePlugin
@@ -36,13 +37,8 @@ class netdiscoNode extends simplePlugin
       'plShortName'   => _('NetdiscoNode'),
       'plDescription' => _('Netdisco Node'),
       'plPriority'    => 30,
-      'plObjectClass' => ['netdiscoNode'], //'fdNetdiscoClient'],
+      'plObjectClass' => [],
       'plObjectType'  => ['workstation'],
-//=> [
-//        'name'        => _('NetDisco'),
-//        'icon'        => 'geticon.php?context=types&icon=ethernet&size=16',
-//      ]],
-
       'plProvidedAcls'  => parent::generatePlProvidedAcls(static::getAttributesInfo())
     ];
   }
@@ -56,46 +52,44 @@ class netdiscoNode extends simplePlugin
     global $config;
 
     $this->connectNetdiscoServer();
-    $nodeInfo = $this->netdiscoHandler->getSearchNode(array('q'=>$this->attrs['macAddress'][0]));
-
-    var_dump($nodeInfo);
-
-    $this->fdNetdiscoTrace = $this->displayNode($nodeInfo);
-
+    $arrayNodeInfo = array();
+    foreach ( $this->attrs['macAddress'] as $mac ){
+        $nodeInfo = $this->netdiscoHandler->getSearchNode(array('q'=> $mac));
+        $arrayNodeInfo[$mac] = $this->displayNode($nodeInfo);
+        }
+        var_dump($arrayNodeInfo);
+    $this->fdNetdiscoTrace = $arrayNodeInfo;
   }
 
   public function displayNode ($deviceInfo){
-/*
-    $id   = "info"y;
-    $div  = new divSelectBox('rows'.$id);
+
+    $netdiscoData = new netdiscoDataRenderer();
+    $arrayDiv=array();
     $smarty = get_smarty();
-//    var_dump(count(array_keys($typeDetails[$category])));
-    $div->setHeight(count(array_keys($typeDetails[$category])) * 30);
-    //$div->setHeight((int)180);
+    foreach ($deviceInfo as $item => $value){
+        if ($value) {
+            $div = new divSelectBox('rows'.$item);
+            // set height depending values
+            $div->setHeight(count(array_keys($deviceInfo->$item)) * 30 + 40);
+            $headers=array();
+            foreach ($netdiscoData->getDictionnary('node')[$item] as $field => $attr ) {
+                $headers[]=$netdiscoData->getDictionnary('node')[$item][$field]['label'];
+            }
+            $div->setHeaders($headers);
 
-//    $div->setHeaders([_('Informations'), _('Values')]);
-
-    $fields=[];
-    $clientInfo=$category;
-    //foreach (array_keys($typeDetails) as $clientInfo) {
-      foreach ($typeDetails[$clientInfo] as $infoKey => $infoType){
-          $fields = [
-             ['string' => $infoType['label']],
-             ['string' => $this->dataRenderer($infoType['type'],$arr[$infoKey])],
-            ];
-        $div->addEntry($fields);
-
+            foreach ($deviceInfo->$item as &$record) {
+                $fields=array();
+                foreach ($netdiscoData->getDictionnary('node')[$item] as $field => $attr ){
+                    $fields[]=[ 'string' => $netdiscoData->getRenderValue($attr['type'] ,$record->$field)];
+                }
+            $div->addEntry($fields);
+            }
+        $arrayDiv[$item] = $div->drawList();
         }
-    //}
 
-   return $div->drawList();
-*/
-
-
-
-
-   return $deviceInfo;
-  }
+    }
+    return $arrayDiv;
+ }
 
 
   static function getAttributesInfo (): array
@@ -115,7 +109,7 @@ class netdiscoNode extends simplePlugin
 
   function __construct ($dn = NULL, $object = NULL, $parent = NULL, $mainTab = FALSE)
   {
- 
+
   parent::__construct($dn, $object, $parent, $mainTab);
   $this->refresh();
   $this->ignore_account = FALSE;  // affiche l'activation ou pas du plugin
@@ -135,7 +129,7 @@ function connectNetdiscoServer() {
       $uServer = $attrs['fdNetdiscoServerURL'][0];
       $uUser   = $attrs['fdNetdiscoServerUser'][0];
       $uPass   = $attrs['fdNetdiscoServerPassword'][0];
-      
+
       $this->netdiscoHandler = new netdisco_server($uServer,$uUser,$uPass);
       return($this->netdiscoHandler->doLogin());
 
