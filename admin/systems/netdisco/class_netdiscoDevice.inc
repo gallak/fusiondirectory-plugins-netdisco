@@ -20,7 +20,7 @@
 
 
 require_once("netdisco/class_netdisco.php");
-
+require_once("netdisco/class_netdiscoDataRenderer.php");
 
 class netdiscoDevice extends simplePlugin
 {
@@ -36,13 +36,8 @@ class netdiscoDevice extends simplePlugin
       'plShortName'   => _('Netdisco'),
       'plDescription' => _('Netdisco'),
       'plPriority'    => 30,
-      'plObjectClass'     => ['netdiscoDevice'], //'fdNetdiscoClient'],
+      'plObjectClass'     => ['netdiscoDevice'],
       'plObjectType'  => ['component' ],
-//=> [
-//        'name'        => _('NetDisco'),
-//        'icon'        => 'geticon.php?context=types&icon=ethernet&size=16',
-//      ]],
-
       'plProvidedAcls'  => parent::generatePlProvidedAcls(static::getAttributesInfo())
     ];
   }
@@ -57,30 +52,26 @@ class netdiscoDevice extends simplePlugin
 
     $this->connectNetdiscoServer();
     $deviceInfo = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
-
-    var_dump($deviceInfo);
-
     $this->fdNetdiscoTopology = $this->displayDevice($deviceInfo);
 
   }
 
   public function displayDevice ($deviceInfo){
 
-	  $switch=array();
-	  foreach ($deviceInfo as &$record){
-		$portXY=explode(".",$record->port);
+      $switch=array();
+      foreach ($deviceInfo as &$record){
+        $portXY=explode(".",$record->port);
                 if ($portXY[1] %2 ){
-   		  $switch[$portXY[0]]['odd'][$portXY[1]] = $record;
+          $switch[$portXY[0]]['odd'][$portXY[1]] = $record;
                 }else{
                   $switch[$portXY[0]]['even'][$portXY[1]] = $record;
                 }
-	  }
-	  foreach ($switch  as &$line){
-		  ksort($line['even']);
+      }
+      foreach ($switch  as &$line){
+          ksort($line['even']);
                   ksort($line['odd']);
-	  }
-	  ksort($switch);
-//	  var_dump($switch);
+      }
+      ksort($switch);
    return $switch;
   }
 
@@ -102,11 +93,10 @@ class netdiscoDevice extends simplePlugin
 
   function __construct ($dn = NULL, $object = NULL, $parent = NULL, $mainTab = FALSE)
   {
-global $config;
- 
-  parent::__construct($dn, $object, $parent, $mainTab);
-  $this->refresh();
-$this->ignore_account = FALSE;  // affiche l'activation ou pas du plugin
+    global $config;
+    parent::__construct($dn, $object, $parent, $mainTab);
+    $this->refresh();
+    $this->ignore_account = TRUE;
   }
 
 
@@ -117,14 +107,13 @@ function connectNetdiscoServer() {
 
 
       $ldap = $config->get_ldap_link();
-      //$ldap->cd($this->urbackupAffectationServer);
       $ldap->search('(objectClass=fdNetdiscoServer)', ['fdNetdiscoServerURL','fdNetdiscoServerUser','fdNetdiscoServerPassword']);
       $attrs = $ldap->fetch();
 
       $uServer = $attrs['fdNetdiscoServerURL'][0];
       $uUser   = $attrs['fdNetdiscoServerUser'][0];
       $uPass   = $attrs['fdNetdiscoServerPassword'][0];
-      
+
       $this->netdiscoHandler = new netdisco_server($uServer,$uUser,$uPass);
       return($this->netdiscoHandler->doLogin());
 
