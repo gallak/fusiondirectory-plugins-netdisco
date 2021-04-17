@@ -17,3 +17,6 @@ With a plugin like netdisco. a real view is provided to FD user  like :
   - real use of vlan declared
 
 It allow to avoid to play to "where is Waldo ?" when you want to find where is the computer with a specific macAddress, a simple request to netdisco and it's done
+
+
+## about swicth design : see https://github.com/GreenItSolutions/dokuwiki-plugin-switchpanel
