@@ -38,7 +38,7 @@ class netdiscoNode extends simplePlugin
       'plDescription' => _('Netdisco Node'),
       'plPriority'    => 30,
       'plObjectClass' => [],
-      'plObjectType'  => ['workstation'],
+      'plObjectType'  => ['workstation','server'],
       'plProvidedAcls'  => parent::generatePlProvidedAcls(static::getAttributesInfo())
     ];
   }
@@ -55,9 +55,15 @@ class netdiscoNode extends simplePlugin
     $arrayNodeInfo = array();
     foreach ( $this->attrs['macAddress'] as $mac ){
         $nodeInfo = $this->netdiscoHandler->getSearchNode(array('q'=> $mac));
-        $arrayNodeInfo[$mac] = $this->displayNode($nodeInfo);
+        if ($nodeInfo) {
+            $arrayNodeInfo[$mac] = $this->displayNode($nodeInfo);
+        }else{
+            $netdiscoData=new netdiscoDataRenderer();
+            foreach ($netdiscoData->getDictionnary('node') as $key => $value){
+                $arrayNodeInfo[$mac][$key] = _('not information available');
+            }
         }
-        var_dump($arrayNodeInfo);
+    }
     $this->fdNetdiscoTrace = $arrayNodeInfo;
   }
 

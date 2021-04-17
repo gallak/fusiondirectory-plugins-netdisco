@@ -77,8 +77,6 @@ class netdisco_server {
 
     $result = $apiClient->get('/search/'.$type);
 
-//    var_dump($result);
-//    var_dump($this->server_token);
     if ( $result->info->http_code == "200" ){
         return($result->decode_response());
     }else{

@@ -19,3 +19,6 @@ msgstr ""
 
 msgid "time_last_stamp"
 msgstr "Derniere vue"
+
+msgid "not information available"
+msgstr "Aucune informations disponible"
