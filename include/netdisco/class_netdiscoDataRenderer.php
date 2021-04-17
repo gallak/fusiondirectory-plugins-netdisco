@@ -81,6 +81,13 @@ array(
             'duplex_admin'    => array('label'    => 'Duplex admin',   'type' => 'string'),
             'stp'             => array('label'    => 'STP',            'type' => 'string'),
         ),
+'subnet' =>
+        array(
+            'active'          =>array('label'     => 'active',         'type' => 'int'),
+            'subnet_size'     =>array('label'     => 'Subnet size',    'type' => 'string'),
+            'subnet'          =>array('label'     => 'subnet',         'type' => 'int'),
+            'percent'         =>array('label'     => 'percent',        'type' => 'int'),
+        )
     );
 
     function getDictionnary($type){

@@ -61,11 +61,34 @@ class netdisco_server {
        return($this->getRemoteSearch('device',$criteria));
    }
 
+/*0:{
+"percent":6
+"subnet":"10.69.80.0/24"
+"active":15
+"subnet_size":256
+}*/
+   public function getReportIpSubnets($criteria){
+       return($this->getRemoteReport('ip/subnets',$criteria));
+   }
 
 
+  private function getRemoteReport($type='',$criteria=''){
+    $headers = array('Accept' => 'application/json', 'Authorization' => $this->server_token);
+    $apiClient = new RestClient();
+    $apiClient->set_option('headers', $headers);
+    $apiClient->set_option('parameters', $criteria);
+    $apiClient->set_option('base_url',$this->server_url.$this->server_uri);
 
-  private function getRemoteReport(){
+    $result = $apiClient->get('/report/'.$type);
+
+    if ( $result->info->http_code == "200" ){
+        return($result->decode_response());
+    }else{
+        print( "Error while Remote reports" );
+    }
   }
+
+
 
   private function getRemoteSearch($type='',$criteria=''){
 
