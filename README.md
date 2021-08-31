@@ -19,4 +19,11 @@ With a plugin like netdisco. a real view is provided to FD user  like :
 It allow to avoid to play to "where is Waldo ?" when you want to find where is the computer with a specific macAddress, a simple request to netdisco and it's done
 
 
-## about swicth design : see https://github.com/GreenItSolutions/dokuwiki-plugin-switchpanel
+## todo
+Netdisco Device
+
+add flag to request or not, VLAN an POWER info per equipement
+add info to allow other topology like 2 row per physical unit ( very depending to netdisco discovering method)
+add % of usage of utilisation port
+add different icons per type of port (rj45 / fiber ..)
+add remote port ( case interco)
