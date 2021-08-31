@@ -15,7 +15,7 @@ array(
                 'dns'               => array('label'    => 'FQDN',           'type' => 'string'),
                 'oui'               => array('label'    => 'Constructor',    'type' => 'oui'),
             ),
-            'sightings' =>
+          'sightings' =>
             array(
                 'time_last_stamp'   => array('label'    => 'Last seen',      'type' => 'datetime'),
                 'time_first_stamp'  => array('label'    => 'First seen',     'type' => 'datetime'),
@@ -24,16 +24,7 @@ array(
                 'mac'               => array('label'    => 'Mac Address',    'type' => 'string'),
                 'switch'            => array('label'    => 'Swicth Address', 'type' => 'string'),
                 'active'            => array('label'    => 'Active',         'type' => 'boolean'),
-            ),
-        'sightings' =>
-            array(
-                'time_last_stamp'   => array('label'    => 'Last seen',      'type' => 'datetime'),
-                'time_first_stamp'  => array('label'    => 'First seen',     'type' => 'datetime'),
-                'device'            => array('label'    => 'Device Name',    'type' => 'string'),
-                'vlan'              => array('label'    => 'Vlan',           'type' => 'string'),
-                'mac'               => array('label'    => 'Mac Address',    'type' => 'string'),
-                'switch'            => array('label'    => 'Swicth Address', 'type' => 'string'),
-                'active'            => array('label'    => 'Active',         'type' => 'boolean'),
+		'port'		    => array('label'	=> 'port',	     'type' => 'string'),
             ),
         'netbios' =>
             array (
