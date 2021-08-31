@@ -22,13 +22,15 @@
 require_once("netdisco/class_netdisco.php");
 require_once("netdisco/class_netdiscoDataRenderer.php");
 
+
 class netdiscoDevice extends simplePlugin
 {
 
   public $netdiscoHandler;
 
   protected $displayHeader  = TRUE;
-  protected $loaded = FALSE;
+  protected $loaded = TRUE;
+  
 
   static function plInfo (): array
   {
@@ -50,31 +52,45 @@ class netdiscoDevice extends simplePlugin
   {
     global $config;
 
-    $this->connectNetdiscoServer();
-    $deviceInfo = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
-    $this->fdNetdiscoTopology = $this->displayDevice($deviceInfo);
+    var_dump($this->connectNetdiscoServer());
+    // get Toplogy of device
+    $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
+    // get Info From device
+    $deviceInfo = $this->netdiscoHandler->getDeviceInfo($this->attrs['ipHostNumber'][0]);
+
+    $smarty = get_smarty();
+    $smarty->assign("deviceInfo",array('name','description','location', 'description','uptime'));
+    $this->fdNetdiscoTopology = $this->drawDevice($this->setupDeviceTopology($deviceTopology));
+    $this->fdNetdiscoInfo = $deviceInfo;
 
   }
+  // increase information per port ( power / vlan )
+  private function setupDeviceTopology($deviceTopology){
+        $orderedStack=array();
+        foreach ($deviceTopology as $record){
+            $portXY=explode(".",$record->port);
+            $swNumber=$portXY[0];
+            $portNumber=$portXY[1];
+            $orderedStack[$swNumber - 1][$portNumber -1]['summary'] = $record;
+            $netdiscoVlan= $this->netdiscoHandler->getDevicePortVlans($this->attrs['ipHostNumber'][0],$record->port);
+	    $vlans = "";
+	    foreach ($netdiscoVlan as $value){
+    			$vlans = $vlans." ".$value->description." (".$value->vlan.")";
+            }
+	    $orderedStack[$swNumber - 1][$portNumber -1]['vlan'] = $vlans;
+	    $orderedStack[$swNumber - 1][$portNumber -1]['power'] = $this->netdiscoHandler->getDevicePortPower($this->attrs['ipHostNumber'][0],$record->port);
+        }
 
-  public function displayDevice ($deviceInfo){
+    return($orderedStack);
+}
 
-      $switch=array();
-      foreach ($deviceInfo as &$record){
-        $portXY=explode(".",$record->port);
-                if ($portXY[1] %2 ){
-          $switch[$portXY[0]]['odd'][$portXY[1]] = $record;
-                }else{
-                  $switch[$portXY[0]]['even'][$portXY[1]] = $record;
-                }
-      }
-      foreach ($switch  as &$line){
-          ksort($line['even']);
-                  ksort($line['odd']);
-      }
-      ksort($switch);
-   return $switch;
+
+  // Draw device with SVG
+  public function drawDevice ($deviceTopology){
+
+    $deviceDraw= new stackNetDiscoRenderer();
+    return($deviceDraw->convertNetdiscoArrayToGraphicalArray($deviceTopology));
   }
-
 
   static function getAttributesInfo (): array
   {
@@ -84,6 +100,7 @@ class netdiscoDevice extends simplePlugin
         'name'  => _('Device topology'),
         'attrs' => [
              new FakeAttribute('fdNetdiscoTopology'),
+             new FakeAttribute('fdNetdiscoInfo'),
             ],
           'template' => get_template_path('switch.tpl', TRUE, dirname(__FILE__)),
           ],

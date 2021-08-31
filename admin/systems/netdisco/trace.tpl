@@ -8,8 +8,6 @@
 
     {foreach $attributes.fdNetdiscoTrace as $macInfo}
         <h1>{$macInfo@key}</h1>
-
-
         {foreach $macInfo as $value}
         <h2>{$value@key}</h2>
             {$value}
