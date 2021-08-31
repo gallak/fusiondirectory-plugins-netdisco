@@ -47,9 +47,24 @@ class netdisco_server {
     }
 }
 
+   public function getDeviceInfo($ip=''){
+       return($this->getRemoteObjects('device/'.$ip));
+   }
 
    public function getDevicePorts($ip=''){
        return($this->getRemoteObjects('device/'.$ip.'/ports'));
+   }
+
+   public function getDevicePortVlans($ip='',$port=''){
+       return($this->getRemoteObjects('device/'.$ip.'/port/'.$port.'/vlans'));
+   }
+
+   public function getDevicePortPower($ip='',$port=''){
+       return($this->getRemoteObjects('device/'.$ip.'/port/'.$port.'/power'));
+   }
+
+   public function getDevicePortDetails($ip='',$port=''){
+       return($this->getRemoteObjects('device/'.$ip.'/port/'.$port));
    }
 
 
