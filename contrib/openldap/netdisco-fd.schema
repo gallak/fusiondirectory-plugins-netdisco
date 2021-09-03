@@ -1,0 +1,59 @@
+##
+## netdisco-fd.schema - Needed by Fusion Directory for managing netdisco configuration
+## OID 125
+
+# Attributes
+attributetype ( 1.3.6.1.4.1.38414.125.1.1 NAME 'fdNetdiscoServerURL'
+        DESC 'FusionDirectory - The netdisco server url'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.38414.125.1.2 NAME 'fdNetdiscoServerUser'
+        DESC 'FusionDirectory - The netdisco server user'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.38414.125.1.3 NAME 'fdNetdiscoServerPassword'
+        DESC 'FusionDirectory - The netdisco server password'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.38414.125.1.4 NAME 'fdNetdiscoDeviceShowVlanMembership'
+        DESC 'FusionDirectory - Show Vlan membership'
+        EQUALITY booleanMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+        SINGLE-VALUE)
+
+attributetype ( 1.3.6.1.4.1.38414.125.1.5 NAME 'fdNetdiscoDeviceShowPower'
+        DESC 'FusionDirectory - Show Power Information per port'
+        EQUALITY booleanMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+        SINGLE-VALUE) 
+
+attributetype ( 1.3.6.1.4.1.38414.125.1.6 NAME 'fdNetdiscoDeviceType'
+        DESC 'FusionDirectory - Netdisco Device Type (for graphical representation)'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+        SINGLE-VALUE )
+
+# Object Class
+objectclass (1.3.6.1.4.1.38414.125.2.1 NAME 'fdNetdiscoServer'
+        SUP top AUXILIARY
+        DESC 'FusionDirectory - Netdisco server'
+        MUST ( fdNetdiscoServerURL )
+        MAY ( fdNetdiscoServerUser $ fdNetdiscoServerPassword ))
+
+objectclass (1.3.6.1.4.1.38414.125.2.1 NAME 'fdNetdiscoDevice'
+        SUP top AUXILIARY
+        DESC 'FusionDirectory - Netdisco Device'
+        MUST ( cn )
+        MAY ( fdNetdiscoDeviceType $ fdNetdiscoShowPower $ fdNetdiscoShowVlanMembership) )
+
+
