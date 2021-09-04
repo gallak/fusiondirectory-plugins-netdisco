@@ -50,10 +50,10 @@ objectclass (1.3.6.1.4.1.38414.125.2.1 NAME 'fdNetdiscoServer'
         MUST ( fdNetdiscoServerURL )
         MAY ( fdNetdiscoServerUser $ fdNetdiscoServerPassword ))
 
-objectclass (1.3.6.1.4.1.38414.125.2.1 NAME 'fdNetdiscoDevice'
+objectclass (1.3.6.1.4.1.38414.125.2.2 NAME 'fdNetdiscoDevice'
         SUP top AUXILIARY
         DESC 'FusionDirectory - Netdisco Device'
         MUST ( cn )
-        MAY ( fdNetdiscoDeviceType $ fdNetdiscoShowPower $ fdNetdiscoShowVlanMembership) )
+        MAY ( fdNetdiscoDeviceType $ fdNetdiscoDeviceShowPower $ fdNetdiscoDeviceShowVlanMembership) )
 
 
