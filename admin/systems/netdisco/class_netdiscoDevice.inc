@@ -28,15 +28,17 @@ class netdiscoDevice extends simplePlugin
 
   public $netdiscoHandler;
 
-  protected $displayHeader  = TRUE;
+  protected $displayHeader  = FALSE;
   protected $loaded = TRUE;
-  
+
+  var $objectclasses = array('fdNetdiscoDevice');
 
   static function plInfo (): array
   {
     return [
       'plShortName'   => _('Netdisco'),
       'plDescription' => _('Netdisco'),
+      'plTitle'       => _('Netdisco'),
       'plPriority'    => 30,
       'plObjectClass'     => ['netdiscoDevice'],
       'plObjectType'  => ['component' ],
@@ -52,7 +54,7 @@ class netdiscoDevice extends simplePlugin
   {
     global $config;
 
-    var_dump($this->connectNetdiscoServer());
+    $this->connectNetdiscoServer();
     // get Toplogy of device
     $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
     // get Info From device
@@ -72,13 +74,17 @@ class netdiscoDevice extends simplePlugin
             $swNumber=$portXY[0];
             $portNumber=$portXY[1];
             $orderedStack[$swNumber - 1][$portNumber -1]['summary'] = $record;
-            $netdiscoVlan= $this->netdiscoHandler->getDevicePortVlans($this->attrs['ipHostNumber'][0],$record->port);
-	    $vlans = "";
-	    foreach ($netdiscoVlan as $value){
-    			$vlans = $vlans." ".$value->description." (".$value->vlan.")";
+            if ( isset($this->fdNetdiscoDeviceShowVlanMembership) && $this->fdNetdiscoDeviceShowVlanMembership == 'TRUE'){
+                $netdiscoVlan= $this->netdiscoHandler->getDevicePortVlans($this->attrs['ipHostNumber'][0],$record->port);
+                $vlans = "";
+                foreach ($netdiscoVlan as $value){
+                    $vlans = $vlans." ".$value->description." (".$value->vlan.")";
+                }
+                $orderedStack[$swNumber - 1][$portNumber -1]['vlan'] = $vlans;
+	    }
+            if ( isset($this->fdNetdiscoDeviceShowPower) && $this->fdNetdiscoDeviceShowPower == 'TRUE'){
+	        $orderedStack[$swNumber - 1][$portNumber -1]['power'] = $this->netdiscoHandler->getDevicePortPower($this->attrs['ipHostNumber'][0],$record->port);
             }
-	    $orderedStack[$swNumber - 1][$portNumber -1]['vlan'] = $vlans;
-	    $orderedStack[$swNumber - 1][$portNumber -1]['power'] = $this->netdiscoHandler->getDevicePortPower($this->attrs['ipHostNumber'][0],$record->port);
         }
 
     return($orderedStack);
@@ -89,15 +95,30 @@ class netdiscoDevice extends simplePlugin
   public function drawDevice ($deviceTopology){
 
     $deviceDraw= new stackNetDiscoRenderer();
-    return($deviceDraw->convertNetdiscoArrayToGraphicalArray($deviceTopology));
+    return($deviceDraw->convertNetdiscoArrayToGraphicalArray($deviceTopology,$this->fdNetdiscoDeviceType));
   }
 
   static function getAttributesInfo (): array
   {
     return [
-      'topology' => [
+      'settings' => [
         'class' => ['fullwidth'],
-        'name'  => _('Device topology'),
+       'name'  => _('Device Settings'),
+       'attrs' =>[
+             new SelectAttribute(_('Physical topology'),_('How device port are organized'),
+                 'fdNetdiscoDeviceType',TRUE,
+                 array('2-leftup','2-leftdown','4-leftup','4-leftdown','1-leftup'),'2-leftup',
+                 array('2 lines of port, first is on the up left','2 lines of port, first is on down left','4 lines of ports, first is on the left up','4 lines of ports, first is on the left up','1 lines of port, first is on the left'),
+                 ),
+             new BooleanAttribute(_('Show Power status'), _('Show Power information per port'),
+                 'fdNetdiscoDeviceShowPower',FALSE,FALSE),
+             new BooleanAttribute(_('Show Vlan Membership'), _('Show Vlan which this ports is belong to'),
+                 'fdNetdiscoDeviceShowVlanMembership',FALSE,FALSE),
+            ],
+      ],
+      'topology' => [
+       'class' => ['fullwidth'],
+       'name'  => _('Device topology'),
         'attrs' => [
              new FakeAttribute('fdNetdiscoTopology'),
              new FakeAttribute('fdNetdiscoInfo'),

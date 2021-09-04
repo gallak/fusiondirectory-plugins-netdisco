@@ -23,10 +23,12 @@
 			{assign var=rightColor value="#35495E"}
 			{assign var=plugColor value="#7f7f7f"}
 		{/if}
-                {if $data['power']->power == "0" }
+                {if isset($data['power'])}
+                    {if $data['power']->power == "0" }
 			{assign var=powerColor value="#b2b2b2"}
-		{else}
+		    {else}
 			{assign var=powerColor value="#ff7f00"}
+                    {/if}
 		{/if}
 
           <td style="border: 1px solid grey;">

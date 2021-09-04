@@ -5,9 +5,9 @@
 Port {$position[0]}/{$position[1]}
 Speed {$data['summary']->speed}
 State {$data['summary']->up}
-Power {$data['power']->power} mW
 Vlan PVID : {$data['summary']->pvid}
-Vlan List : {$data['vlan']}
+{if isset($data['power'])}Power {$data['power']->power} mW{/if}
+{if isset($data['vlan'])}Vlan List : {$data['vlan']}{/if}
 </title>
 
   <rect rx="3" id="portOut" height="110" width="160" y="0" x="0" stroke="#444444" fill="#ffffff"/>
@@ -20,7 +20,9 @@ Vlan List : {$data['vlan']}
 </g>
   <rect stroke-width="2" rx="2" id="plug" height="60" width="130" y="15" x="15" stroke="#444444" fill="{$plugColor}"/>
   <rect stroke-width="2" stroke="#444444" id="ergot" height="10" width="30" y="75" x="65" fill="{$plugColor}"/>
+{if isset($data['power'])}
   <text font-style="normal" font-weight="bold" xml:space="preserve" text-anchor="start" font-family="sans-serif" font-size="50" stroke-width="0" id="svg_8" y="63" x="61" stroke="#000" fill="{$powerColor}">P</text>
+{/if}
  </g>
 </svg>
 
