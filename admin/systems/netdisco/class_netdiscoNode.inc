@@ -74,21 +74,29 @@ class netdiscoNode extends simplePlugin
     $netdiscoData = new netdiscoDataRenderer();
     $arrayDiv=array();
     $smarty = get_smarty();
+    // what to display
+    $displayInformations = array( 'ips'       => array('time_last_stamp','time_first_stamp','ip','dns','oui'),
+                                 'sightings' => array('time_last_stamp','time_first_stamp','switch','port','vlan'),
+			         'netbios'   => array('time_last_stamp','time_first_stamp','nbname','nbuser','domain','ip')
+                               );
+
     foreach ($deviceInfo as $item => $value){
         if ($value) {
             $div = new divSelectBox('rows'.$item);
             // set height depending values
             $div->setHeight(count(array_keys($deviceInfo->$item)) * 30 + 40);
             $headers=array();
-            foreach ($netdiscoData->getDictionnary('node')[$item] as $field => $attr ) {
-                $headers[]=$netdiscoData->getDictionnary('node')[$item][$field]['label'];
+//            foreach ($netdiscoData->getDictionnary('node')[$item] as $field => $attr ) {
+              foreach ($displayInformations[$item] as $field){
+		$headers[]=_($field);
             }
             $div->setHeaders($headers);
 
             foreach ($deviceInfo->$item as &$record) {
                 $fields=array();
-                foreach ($netdiscoData->getDictionnary('node')[$item] as $field => $attr ){
-                    $fields[]=[ 'string' => $netdiscoData->getRenderValue($attr['type'] ,$record->$field)];
+                //foreach ($netdiscoData->getDictionnary('node')[$item] as $field => $attr ){
+                foreach ($displayInformations[$item] as $field){
+                    $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getDictionnary('node')[$item][$field]['type'] ,$record->$field)];
                 }
             $div->addEntry($fields);
             }
@@ -103,13 +111,13 @@ class netdiscoNode extends simplePlugin
   static function getAttributesInfo (): array
   {
     return [
-      'topology' => [
+      'nodeTrace' => [
         'class' => ['fullwidth'],
         'name'  => _('Node Trace'),
         'attrs' => [
              new FakeAttribute('fdNetdiscoTrace'),
             ],
-          'template' => get_template_path('trace.tpl', TRUE, dirname(__FILE__)),
+          'template' => get_template_path('netdiscoNode.tpl', TRUE, dirname(__FILE__)),
           ],
     ];
   }

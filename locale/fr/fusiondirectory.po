@@ -17,8 +17,140 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "time_last_stamp"
-msgstr "Derniere vue"
-
 msgid "not information available"
 msgstr "Aucune informations disponible"
+
+msgid "Mac address"
+msgstr "Addresse MAC"
+
+msgid "sightings"
+msgstr "Historique des observations"
+
+msgid "ips"
+msgstr "Historique des affectations IPs"
+
+msgid "active"
+msgstr "Actif"
+
+msgid "creation"
+msgstr "Date de création"
+
+msgid "descr"
+msgstr "Description"
+
+msgid "device"
+msgstr "Périphérique"
+
+msgid "dns"
+msgstr "Nom DNS"
+
+msgid "domain"
+msgstr "Domaine"
+
+msgid "duplex"
+msgstr "Flux"
+
+msgid "duplex_admin"
+msgstr "Flux forcé"
+
+msgid "ip"
+msgstr "Adresse IP"
+
+msgid "is_master"
+msgstr "Est maitre"
+
+msgid "is_uplink"
+msgstr "Est activé"
+
+msgid "lastchange"
+msgstr "Date de dernière modification"
+
+msgid "mac"
+msgstr "Adresse MAC"
+
+msgid "manual_topo"
+msgstr "Topologie manuelle"
+
+msgid "mtu"
+msgstr "MTU"
+
+msgid "name"
+msgstr "Nom"
+
+msgid "nbname"
+msgstr "nom NETBIOS"
+
+msgid "nbuser"
+msgstr "utilisateur NETBIOS"
+
+msgid "oui"
+msgstr "Constructeur"
+
+msgid "percent"
+msgstr "Pourcentage"
+
+msgid "port"
+msgstr "Port"
+
+msgid "pvid"
+msgstr "Vlan par défaut"
+
+msgid "remote_id"
+msgstr "Identifiant distant"
+
+msgid "remote_port"
+msgstr "Port distant"
+
+msgid "remote_type"
+msgstr "Type distant"
+
+msgid "server"
+msgstr "Serveur"
+
+msgid "slave_of"
+msgstr "Port secondaire"
+
+msgid "speed"
+msgstr "Vitesse"
+
+msgid "speed_admin"
+msgstr "Vitesse forcée"
+
+msgid "stp"
+msgstr "STP???"
+
+msgid "subnet"
+msgstr "Sous réseau"
+
+msgid "subnet_size"
+msgstr "Taille du sous réseau"
+
+msgid "switch"
+msgstr "Swicth"
+
+msgid "time_first_stamp"
+msgstr "Première vue"
+
+msgid "time_last_stamp"
+msgstr "Dernière vue"
+
+msgid "type"
+msgstr "Type"
+
+msgid "up"
+msgstr "UP(??)"
+
+msgid "up_admin"
+msgstr "UP admin (??)"
+
+msgid "vlan"
+msgstr "VLAN"
+
+msgid "NetdiscoNode"
+msgstr "NetDisco"
+
+msgid "netbios"
+msgstr "Historique des informations Netbios"
+
+msgid "no value found"
+msgstr "Pas de valeur" 
