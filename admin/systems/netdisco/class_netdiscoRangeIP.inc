@@ -28,7 +28,7 @@ class netdiscoRangeIP extends simplePlugin
 
   public $netdiscoHandler;
 
-  protected $displayHeader  = TRUE;
+  protected $displayHeader  = FALSE;
   protected $loaded = FALSE;
 
   static function plInfo (): array
@@ -53,57 +53,102 @@ class netdiscoRangeIP extends simplePlugin
 
     $this->connectNetdiscoServer();
     $subnetInfo = $this->netdiscoHandler->getReportIpSubnets(array('subnet'=> $this->attrs['fdIpamSubnetCIDR'][0] ));
-var_dump($subnetInfo);
+    $ipInventoryInfo = $this->netdiscoHandler->getReportIpInventory(array('subnet'=> $this->attrs['fdIpamSubnetCIDR'][0] ));
     if ($subnetInfo) {
-        $subnetDisplayInfo = $this->displayNode($nodeInfo);
-    }else{
-        $netdiscoData=new netdiscoDataRenderer();
-        foreach ($netdiscoData->getDictionnary('subnet') as $key => $value){
-            $subnetDisplayInfo[$key] = _('not information available');
-        }
+        $subnetDisplayInfo = $this->displaySubnet($subnetInfo);
     }
-    array_shift($subnetDisplayInfo);
-    $this->fdNetdiscoTrace = $subnetDisplayInfo;
+    if ($ipInventoryInfo) {
+	$ipInventoryDisplayInfo = $this->displayInventory($ipInventoryInfo);
+    }
+
+    $this->fdNetdiscoReportSubnet = $subnetDisplayInfo;
+    $this->fdNetdiscoReportIpInventory = $ipInventoryDisplayInfo;
   }
 
-  public function displayNode ($subnetInfo){
+  public function displaySubnet($subnetInfo){
 
-    $netdiscoData = new netdiscoDataRenderer();
+
+  $netdiscoData = new netdiscoDataRenderer();
     $arrayDiv=array();
     $smarty = get_smarty();
     $item = 'subnet';
+    $displayInformations = array( 'subnet'       => array('subnet','subnet_size','active','percent'));
+
+
     $div = new divSelectBox('rows'.$item);
     // set height depending values
-    $div->setHeight(count(array_keys($subnetInfo->$item)) * 30 + 40);
+    $div->setHeight(count(array_keys($subnetInfo)) * 30 + 40);
     $headers=array();
-    foreach ($netdiscoData->getDictionnary($item) as $field => $attr ) {
-        $headers[]=$netdiscoData->getDictionnary($item)[$field]['label'];
+    foreach ($displayInformations[$item] as $field) {
+        $headers[]=_($field);
         }
     $div->setHeaders($headers);
 
-    foreach ($subnetInfo->$item as &$record) {
+    foreach ($subnetInfo as &$record) {
         $fields=array();
-        foreach ($netdiscoData->getDictionnary($item) as $field => $attr ){
-            $fields[]=[ 'string' => $netdiscoData->getRenderValue($attr['type'] ,$record->$field)];
+
+	foreach ($displayInformations[$item] as $field){
+            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getDictionnary($item)[$field]['type'] ,$record->$field)];
         }
         $div->addEntry($fields);
     }
+    return $div->drawList();
 
-
-    return $div->drawList();;
  }
+
+
+  public function displayInventory($subnetInfo){
+
+
+  $netdiscoData = new netdiscoDataRenderer();
+    $arrayDiv=array();
+    $smarty = get_smarty();
+    $item = 'inventory';
+    $displayInformations = array( 'inventory'  => array('dns','ip','mac','vendor','age','time_first','time_last'));
+
+
+    $div = new divSelectBox('rows'.$item);
+    // set height depending values
+    $div->setHeight(count(array_keys($subnetInfo)) * 30 + 40);
+    $headers=array();
+    foreach ($displayInformations[$item] as $field) {
+        $headers[]=_($field);
+        }
+    $div->setHeaders($headers);
+
+    foreach ($subnetInfo as &$record) {
+        $fields=array();
+        foreach ($displayInformations[$item] as $field){
+            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getDictionnary($item)[$field]['type'] ,$record->$field)];
+        }
+        $div->addEntry($fields);
+    }
+    return $div->drawList();;
+
+ }
+
+
+
 
 
   static function getAttributesInfo (): array
   {
     return [
-      'topology' => [
+      'subnet' => [
         'class' => ['fullwidth'],
-        'name'  => _('Node Trace'),
+        'name'  => _('Subnet statistics'),
         'attrs' => [
              new FakeAttribute('fdNetdiscoReportSubnet'),
             ],
           'template' => get_template_path('subnet.tpl', TRUE, dirname(__FILE__)),
+          ],
+      'inventory' => [
+        'class' => ['fullwidth'],
+        'name'  => _('Inventory'),
+        'attrs' => [
+             new FakeAttribute('fdNetdiscoReportIpInventory'),
+            ],
+          'template' => get_template_path('inventory.tpl', TRUE, dirname(__FILE__)),
           ],
     ];
   }
