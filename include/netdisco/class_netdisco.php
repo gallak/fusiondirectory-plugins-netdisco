@@ -76,6 +76,11 @@ class netdisco_server {
        return($this->getRemoteSearch('device',$criteria));
    }
 
+   public function getSearchVlan($criteria){
+       return($this->getRemoteSearch('vlan',$criteria));
+   }
+
+
 /*0:{
 "percent":6
 "subnet":"10.69.80.0/24"
@@ -84,6 +89,10 @@ class netdisco_server {
 }*/
    public function getReportIpSubnets($criteria){
        return($this->getRemoteReport('ip/subnets',$criteria));
+   }
+
+   public function getReportIpInventory($criteria){
+       return($this->getRemoteReport('ip/ipinventory',$criteria));
    }
 
 

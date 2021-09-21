@@ -72,13 +72,33 @@ array(
             'duplex_admin'    => array('label'    => 'Duplex admin',   'type' => 'string'),
             'stp'             => array('label'    => 'STP',            'type' => 'string'),
         ),
-'subnet' =>
+	'subnet' =>
         array(
             'active'          =>array('label'     => 'active',         'type' => 'int'),
             'subnet_size'     =>array('label'     => 'Subnet size',    'type' => 'string'),
             'subnet'          =>array('label'     => 'subnet',         'type' => 'int'),
             'percent'         =>array('label'     => 'percent',        'type' => 'int'),
-        )
+        ),
+	'inventory' => array(
+            'active'          =>array('label'     => 'active',         'type' => 'int'),
+            'vendor'          =>array('label'     => 'Subnet size',    'type' => 'string'),
+            'mac'             =>array('label'     => 'subnet',         'type' => 'string'),
+            'dns'             =>array('label'     => 'percent',        'type' => 'string'),
+	    'age'             =>array('label'     => 'age',            'type' => 'string'),
+	    'time_last'       =>array('label'     => 'Time last',      'type' => 'string'),
+	    'time_first'      =>array('label'     => 'Time first',     'type' => 'string'),
+	    'ip'              =>array('label'     => 'Ip addres',      'type' => 'string'),
+	),
+        'vlan' =>
+        array(
+            'pcount'          =>array('label'     => 'portNumber',         'type' => 'int'),
+            'model'           =>array('label'     => 'Model',    'type' => 'string'),
+            'vendor'           =>array('label'     => 'Vendor',    'type' => 'string'),
+            'dns'           =>array('label'     => 'DNS',    'type' => 'string'),
+            'os'              =>array('label'     => 'os',         'type' => 'string'),
+            'ip'              =>array('label'     => 'ip',        'type' => 'int'),
+	    'vlans'		=> array('label'	=> 'Vlan',	'type' =>  array("format" => "%s (%s)", "fields" => array('vlan','description'))),
+        ),
     );
 
     function getDictionnary($type){
@@ -91,6 +111,7 @@ array(
 
     function getRenderValue($type='', $value = ''){
         if ( $value ){
+           if (is_string($type)){
             switch ($type) {
                 case "bool":
                     if ($value == "1"){
@@ -114,6 +135,17 @@ array(
                 default:
                     return ($value);
             }
+	  }else{
+                // rendere type is an array
+                $arrayValue=array();
+		if (is_object($value)){
+		    // if value is an objet
+                    foreach ($type['fields'] as $key){
+		        $arrayValue[] = $value->$key;
+                    }
+                return(vsprintf($type['format'],$arrayValue));
+                }
+	  }
         }else{
             return("no value found");
         }
