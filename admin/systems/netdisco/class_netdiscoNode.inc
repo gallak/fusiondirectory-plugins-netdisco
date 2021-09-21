@@ -28,7 +28,7 @@ class netdiscoNode extends simplePlugin
 
   public $netdiscoHandler;
 
-  protected $displayHeader  = TRUE;
+  protected $displayHeader  = FALSE;
   protected $loaded = FALSE;
 
   static function plInfo (): array
@@ -86,7 +86,6 @@ class netdiscoNode extends simplePlugin
             // set height depending values
             $div->setHeight(count(array_keys($deviceInfo->$item)) * 30 + 40);
             $headers=array();
-//            foreach ($netdiscoData->getDictionnary('node')[$item] as $field => $attr ) {
               foreach ($displayInformations[$item] as $field){
 		$headers[]=_($field);
             }
@@ -94,7 +93,6 @@ class netdiscoNode extends simplePlugin
 
             foreach ($deviceInfo->$item as &$record) {
                 $fields=array();
-                //foreach ($netdiscoData->getDictionnary('node')[$item] as $field => $attr ){
                 foreach ($displayInformations[$item] as $field){
                     $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getDictionnary('node')[$item][$field]['type'] ,$record->$field)];
                 }
