@@ -76,8 +76,8 @@ class netdiscoNode extends simplePlugin
     $smarty = get_smarty();
     // what to display
     $displayInformations = array( 'ips'       => array('time_last_stamp','time_first_stamp','ip','dns','oui'),
-                                 'sightings' => array('time_last_stamp','time_first_stamp','switch','port','vlan'),
-			         'netbios'   => array('time_last_stamp','time_first_stamp','nbname','nbuser','domain','ip')
+                                  'sightings' => array('time_last_stamp','time_first_stamp','switch','port','vlan'),
+                                  'netbios'   => array('time_last_stamp','time_first_stamp','nbname','nbuser','domain','ip')
                                );
 
     foreach ($deviceInfo as $item => $value){
@@ -86,7 +86,7 @@ class netdiscoNode extends simplePlugin
             // set height depending values
             $div->setHeight(count(array_keys($deviceInfo->$item)) * 30 + 40);
             $headers=array();
-              foreach ($displayInformations[$item] as $field){
+            foreach ($displayInformations[$item] as $field){
 		$headers[]=_($field);
             }
             $div->setHeaders($headers);
@@ -103,7 +103,7 @@ class netdiscoNode extends simplePlugin
 
     }
     return $arrayDiv;
- }
+  }
 
 
   static function getAttributesInfo (): array
@@ -124,14 +124,14 @@ class netdiscoNode extends simplePlugin
   function __construct ($dn = NULL, $object = NULL, $parent = NULL, $mainTab = FALSE)
   {
 
-  parent::__construct($dn, $object, $parent, $mainTab);
-  $this->refresh();
-  $this->ignore_account = FALSE;  // affiche l'activation ou pas du plugin
+    parent::__construct($dn, $object, $parent, $mainTab);
+    $this->refresh();
+    $this->ignore_account = FALSE;  // affiche l'activation ou pas du plugin
   }
 
 
 
-function connectNetdiscoServer() {
+  function connectNetdiscoServer() {
 
       global $config;
 
@@ -147,6 +147,6 @@ function connectNetdiscoServer() {
       $this->netdiscoHandler = new netdisco_server($uServer,$uUser,$uPass);
       return($this->netdiscoHandler->doLogin());
 
-}
+  }
 
 }

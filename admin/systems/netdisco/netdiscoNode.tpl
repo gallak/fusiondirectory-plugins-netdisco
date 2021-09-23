@@ -7,7 +7,7 @@
 </span>
         {foreach $macInfo as $value}
 		<div>
-		        <b>{t}{$value@key}{/t}</b>
+		        <b>{t}{$value@key}{/t}</b><br>
 		        {$value}
 		</div>
         {/foreach}
