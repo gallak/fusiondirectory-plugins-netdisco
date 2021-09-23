@@ -1,5 +1,8 @@
 <div>
-{include file="./info.tpl"}
+
+{if $attributes.fdNetdiscoInfo}
+
+{include file="./netdiscoDeviceInfo.tpl"}
 <div>
   {foreach from=$attributes.fdNetdiscoTopology key=indice item=unit}
     <table style="border: 2px solid black;">
@@ -10,7 +13,7 @@
 
 
 
- {foreach from=$unit key=realY item=row}
+{foreach from=$unit key=realY item=row}
       <tr style="border: 1px solid grey;">
         {foreach from=$row key=realX item=data}
                 {assign var=position value="."|explode:$data['summary']->port}
@@ -32,7 +35,7 @@
 		{/if}
 
           <td style="border: 1px solid grey;">
-	{include file="./port.tpl"}
+	{include file="./netdiscoDevicePort.tpl"}
 		</td>
 
         {/foreach}
@@ -43,5 +46,7 @@
   {/foreach}
 
 </div>
-
-  </div>
+{else}
+{t}There is no device inside netdisco system{/t}
+{/if}
+</div>

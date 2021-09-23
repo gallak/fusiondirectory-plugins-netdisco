@@ -1,13 +1,15 @@
 <svg width="auto" height="auto" viewBox="0 0 160 110"  xmlns="http://www.w3.org/2000/svg" x="0px" y="0px">
  <g>
 
-<title>Name : {$data['summary']->name}
-Port {$position[0]}/{$position[1]}
-Speed {$data['summary']->speed}
-State {$data['summary']->up}
-Vlan PVID : {$data['summary']->pvid}
-{if isset($data['power'])}Power {$data['power']->power} mW{/if}
-{if isset($data['vlan'])}Vlan List : {$data['vlan']}{/if}
+<title>
+Name  : {$data['summary']->name}
+Port  : {$position[0]}/{$position[1]}
+Speed : {$data['summary']->speed}
+State : {$data['summary']->up}
+Pvid  : {$data['summary']->pvid}
+{if isset($data['power'])}Power : {$data['power']->power} mW{/if}
+
+{if isset($data['vlan'])}Vlans : {$data['vlan']}{/if}
 </title>
 
   <rect rx="3" id="portOut" height="110" width="160" y="0" x="0" stroke="#444444" fill="#ffffff"/>
