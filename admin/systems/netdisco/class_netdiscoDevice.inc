@@ -55,17 +55,18 @@ class netdiscoDevice extends simplePlugin
     global $config;
 
     $this->connectNetdiscoServer();
-    // get Toplogy of device
-    $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
     // get Info From device
+    $smarty = get_smarty();
     $deviceInfo = $this->netdiscoHandler->getDeviceInfo($this->attrs['ipHostNumber'][0]);
 
-    $smarty = get_smarty();
-    $smarty->assign("deviceInfo",array('name','description','location', 'description','uptime'));
-    $this->fdNetdiscoTopology = $this->drawDevice($this->setupDeviceTopology($deviceTopology));
-    $this->fdNetdiscoInfo = $deviceInfo;
-
+    if (! is_null($deviceInfo)){
+        // get Toplogy of device
+        $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
+        $this->fdNetdiscoTopology=$this->drawDevice($this->setupDeviceTopology($deviceTopology));
+        $this->fdNetdiscoInfo=$deviceInfo;
+    }
   }
+
   // increase information per port ( power / vlan )
   private function setupDeviceTopology($deviceTopology){
         $orderedStack=array();
@@ -88,7 +89,7 @@ class netdiscoDevice extends simplePlugin
         }
 
     return($orderedStack);
-}
+  }
 
 
   // Draw device with SVG
@@ -123,7 +124,7 @@ class netdiscoDevice extends simplePlugin
              new FakeAttribute('fdNetdiscoTopology'),
              new FakeAttribute('fdNetdiscoInfo'),
             ],
-          'template' => get_template_path('switch.tpl', TRUE, dirname(__FILE__)),
+          'template' => get_template_path('netdiscoDevice.tpl', TRUE, dirname(__FILE__)),
           ],
     ];
   }
@@ -139,7 +140,7 @@ class netdiscoDevice extends simplePlugin
 
 
 
-function connectNetdiscoServer() {
+  function connectNetdiscoServer() {
 
       global $config;
 
@@ -155,6 +156,6 @@ function connectNetdiscoServer() {
       $this->netdiscoHandler = new netdisco_server($uServer,$uUser,$uPass);
       return($this->netdiscoHandler->doLogin());
 
-}
+  }
 
 }
