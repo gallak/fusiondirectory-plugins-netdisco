@@ -22,8 +22,8 @@ It allow to avoid to play to "where is Waldo ?" when you want to find where is t
 ## todo
 Netdisco Device
 
-add flag to request or not, VLAN an POWER info per equipement
-add info to allow other topology like 2 row per physical unit ( very depending to netdisco discovering method)
-add % of usage of utilisation port
-add different icons per type of port (rj45 / fiber ..)
-add remote port ( case interco)
+add flag to request or not, VLAN an POWER info per equipement DONE
+add info to allow other topology like 2 row per physical unit ( very depending to netdisco discovering method) DONE - TESTING
+add % of usage of utilisation port DONE
+add different icons per type of port (rj45 / fiber ..) TODO
+add remote port ( case interco) TODO
