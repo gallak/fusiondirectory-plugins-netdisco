@@ -1,11 +1,12 @@
+<div id="{$sectionId}" class="plugin-section">
+  <span class="legend">
+    {if !empty($sectionIcon)}<img src="{$sectionIcon|escape}" alt=""/>{/if}{$section|escape}
+  </span>
 
-<div>
 {assign var=deviceInfo value=['name','contact','description','location', 'vendor','layers','model','uptime']}
 <table>
- <tr>
   {foreach from=$deviceInfo item=value}
-    <td>{$value}</td><td>{$attributes.fdNetdiscoInfo->$value}</td>
+    <tr><td><b>{t}{$value}{/t}</b></td><td>{$attributes.fdNetdiscoInfo->$value}</td><tr>
   {/foreach}
-</tr>
 </table>
 </div>

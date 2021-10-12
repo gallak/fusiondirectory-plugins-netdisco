@@ -154,3 +154,24 @@ msgstr "Historique des informations Netbios"
 
 msgid "no value found"
 msgstr "Pas de valeur" 
+
+msgid "contact"
+msgstr "Adresse de contact"
+
+msgid "description"
+msgstr "Description"
+
+msgid "Location"
+msgstr "Localisation"
+
+msgid "vendor"
+msgstr "Constructeur"
+
+msgid "layers"
+msgstr "Couches (OSI)"
+
+msgid "model"
+msgstr "Modèle"
+
+msgid "uptime"
+msgstr "Uptime"

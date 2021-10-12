@@ -60,7 +60,7 @@ class netdiscoDevice extends simplePlugin
     $deviceInfo = $this->netdiscoHandler->getDeviceInfo($this->attrs['ipHostNumber'][0]);
 
     if (! is_null($deviceInfo)){
-        // get Toplogy of device
+        // get Topology of device
         $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
         $this->fdNetdiscoTopology=$this->drawDevice($this->setupDeviceTopology($deviceTopology));
         $this->fdNetdiscoInfo=$deviceInfo;
@@ -103,9 +103,9 @@ class netdiscoDevice extends simplePlugin
   {
     return [
       'settings' => [
-        'class' => ['fullwidth'],
-       'name'  => _('Device Settings'),
-       'attrs' =>[
+//       'class' => ['fullwidth'],
+        'name'  => _('Device Settings'),
+        'attrs' =>[
              new SelectAttribute(_('Physical topology'),_('How device port are organized'),
                  'fdNetdiscoDeviceType',TRUE,
                  array('2-leftup','2-leftdown','4-leftup','4-leftdown','1-leftup'),'2-leftup',
@@ -117,12 +117,21 @@ class netdiscoDevice extends simplePlugin
                  'fdNetdiscoDeviceShowVlanMembership',FALSE,FALSE),
             ],
       ],
+      'details' => [
+        'class' => ['fullwidth'],
+        'name'  => _('Device Details'),
+        'attrs' => [
+            new FakeAttribute('fdNetdiscoInfo'),
+            ],
+          'template' => get_template_path('netdiscoDeviceInfo.tpl', TRUE, dirname(__FILE__)),
+          ],
+
       'topology' => [
-       'class' => ['fullwidth'],
-       'name'  => _('Device topology'),
+        'class' => ['fullwidth'],
+        'name'  => _('Device topology'),
         'attrs' => [
              new FakeAttribute('fdNetdiscoTopology'),
-             new FakeAttribute('fdNetdiscoInfo'),
+//             new FakeAttribute('fdNetdiscoInfo'),
             ],
           'template' => get_template_path('netdiscoDevice.tpl', TRUE, dirname(__FILE__)),
           ],

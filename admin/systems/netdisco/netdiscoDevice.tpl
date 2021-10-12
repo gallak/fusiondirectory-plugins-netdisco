@@ -1,8 +1,10 @@
-<div>
+<div id="{$sectionId}"  class="plugin-section fullwidth">
+  <span class="legend">
+    {if !empty($sectionIcon)}<img src="{$sectionIcon|escape}" alt=""/>{/if}{$section|escape}
+  </span>
 
-{if $attributes.fdNetdiscoInfo}
 
-{include file="./netdiscoDeviceInfo.tpl"}
+{if $attributes.fdNetdiscoTopology}
 <div>
   {foreach from=$attributes.fdNetdiscoTopology key=indice item=unit}
     <table style="border: 2px solid black;">
@@ -50,3 +52,4 @@
 {t}There is no device inside netdisco system{/t}
 {/if}
 </div>
+
