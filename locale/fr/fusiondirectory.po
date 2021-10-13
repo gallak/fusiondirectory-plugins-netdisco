@@ -175,3 +175,6 @@ msgstr "Modèle"
 
 msgid "uptime"
 msgstr "Uptime"
+
+msgid "No informations (Mac address has been specified ?)"
+msgstr "Pas d'informations disponible !(L'adresse MAC a t'elle été insérée ?)"

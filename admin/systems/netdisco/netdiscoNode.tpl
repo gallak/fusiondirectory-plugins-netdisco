@@ -1,5 +1,6 @@
 <div>
 
+{if $attributes.fdNetdiscoTrace}
 {foreach $attributes.fdNetdiscoTrace as $macInfo}
 <div id="{$macInfo@key}" class="plugin-section">
 <span class="legend">
@@ -14,5 +15,8 @@
 	</div>
 </div>
 {/foreach}
+{else}
+<span>{t}No informations (Mac address has been specified ?){/t}</span>
+{/if}
 
 </div>
