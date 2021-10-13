@@ -140,7 +140,7 @@ class netdiscoRangeIP extends simplePlugin
         'attrs' => [
              new FakeAttribute('fdNetdiscoReportSubnet'),
             ],
-          'template' => get_template_path('subnet.tpl', TRUE, dirname(__FILE__)),
+          'template' => get_template_path('netdiscoSubnet.tpl', TRUE, dirname(__FILE__)),
           ],
       'inventory' => [
         'class' => ['fullwidth'],
@@ -148,7 +148,7 @@ class netdiscoRangeIP extends simplePlugin
         'attrs' => [
              new FakeAttribute('fdNetdiscoReportIpInventory'),
             ],
-          'template' => get_template_path('inventory.tpl', TRUE, dirname(__FILE__)),
+          'template' => get_template_path('netdiscoRangeIP.tpl', TRUE, dirname(__FILE__)),
           ],
     ];
   }

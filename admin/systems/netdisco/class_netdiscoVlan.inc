@@ -66,7 +66,7 @@ class netdiscoVlan extends simplePlugin
     $arrayDiv=array();
     $smarty = get_smarty();
     $item = 'vlan';
-    $displayInformations = array( 'vlan'       => array('ip','os','model','pcount','dns','vendor','vlans'));
+    $displayInformations = array( 'vlan'      => array('ip','os','model','pcount','dns','vendor','vlans'));
 
 
     $div = new divSelectBox('rows'.$item);
@@ -100,7 +100,7 @@ class netdiscoVlan extends simplePlugin
         'attrs' => [
              new FakeAttribute('fdNetdiscoReportVlan'),
             ],
-          'template' => get_template_path('vlan.tpl', TRUE, dirname(__FILE__)),
+          'template' => get_template_path('netdiscoVlan.tpl', TRUE, dirname(__FILE__)),
           ],
     ];
   }
