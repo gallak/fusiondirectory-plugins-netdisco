@@ -67,6 +67,10 @@ class netdisco_server {
        return($this->getRemoteObjects('device/'.$ip.'/port/'.$port));
    }
 
+   public function getDeviceIpsDetails($ip=''){
+	return($this->getRemoteObjects('device/'.$ip.'/device_ips'));
+   }
+
 
    public function getSearchNode($criteria){
        return($this->getRemoteSearch('node',$criteria));

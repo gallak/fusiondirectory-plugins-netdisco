@@ -4,7 +4,17 @@ class netdiscoDataRenderer {
 
 private $netdiscoDataDictionnary=
 array(
- 'node' =>
+  'ips' =>
+        array(
+                'port'             => array('label'    => 'Port',      'type' => 'string'),
+                'creation'         => array('label'    => 'Creation',     'type' => 'datetime'),
+                'alias'            => array('label'    => 'Alias',         'type' => 'string'),
+                'ip'               => array('label'    => 'Ip Address',    'type' => 'string'),
+                'dns'              => array('label'    => 'FQDN',           'type' => 'string'),
+                'subnet'           => array('label'    => 'Subnet',    'type' => 'string'),
+            ),
+
+  'node' =>
         array('ips' =>
             array(
                 'time_last_stamp'   => array('label'    => 'Last seen',      'type' => 'datetime'),
@@ -45,7 +55,7 @@ array(
                 'time_first_stamp'  => array('label'    => 'First seen',     'type' => 'datetime'),
             ),
         ),
-'deviceports' =>
+    'deviceports' =>
         array(
             'duplex'          => array('label'    => 'Flow',           'type' => 'string'),
             'name'            => array('label'    => 'Name',           'type' => 'string'),

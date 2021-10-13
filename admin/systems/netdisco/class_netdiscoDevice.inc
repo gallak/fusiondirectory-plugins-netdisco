@@ -64,8 +64,41 @@ class netdiscoDevice extends simplePlugin
         $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
         $this->fdNetdiscoTopology=$this->drawDevice($this->setupDeviceTopology($deviceTopology));
         $this->fdNetdiscoInfo=$deviceInfo;
+	$this->fdNetdiscoInfoIp=$this->displayIps($this->netdiscoHandler->getDeviceIpsDetails($this->attrs['ipHostNumber'][0]));
+
     }
   }
+
+
+  public function displayIps($ipInfo){
+
+    $netdiscoData = new netdiscoDataRenderer();
+    $arrayDiv=array();
+    $smarty = get_smarty();
+    $item = 'ips';
+    $displayInformations = array( 'ips'      => array('ip','alias','subnet','port','dns'));
+
+
+    $div = new divSelectBox('rows'.$item);
+    // set height depending values
+    $div->setHeight(count(array_keys($ipInfo)) * 30 + 40);
+    $headers=array();
+    foreach ($displayInformations[$item] as $field) {
+        $headers[]=_($field);
+        }
+    $div->setHeaders($headers);
+
+    foreach ($ipInfo as &$record) {
+        $fields=array();
+        foreach ($displayInformations[$item] as $field){
+            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getDictionnary($item)[$field]['type'] ,$record->$field)];
+        }
+        $div->addEntry($fields);
+    }
+    return $div->drawList();
+ }
+
+
 
   // increase information per port ( power / vlan )
   private function setupDeviceTopology($deviceTopology){
@@ -117,13 +150,22 @@ class netdiscoDevice extends simplePlugin
                  'fdNetdiscoDeviceShowVlanMembership',FALSE,FALSE),
             ],
       ],
-      'details' => [
+      'detailsInfo' => [
         'class' => ['fullwidth'],
         'name'  => _('Device Details'),
         'attrs' => [
             new FakeAttribute('fdNetdiscoInfo'),
             ],
           'template' => get_template_path('netdiscoDeviceInfo.tpl', TRUE, dirname(__FILE__)),
+          ],
+
+      'detailsIps' => [
+        'class' => ['fullwidth'],
+        'name'  => _('Device Ips'),
+        'attrs' => [
+            new FakeAttribute('fdNetdiscoInfoIp'),
+            ],
+          'template' => get_template_path('netdiscoDeviceInfoIp.tpl', TRUE, dirname(__FILE__)),
           ],
 
       'topology' => [
