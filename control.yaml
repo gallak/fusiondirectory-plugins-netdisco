@@ -1,0 +1,62 @@
+information:
+  name : netdisco
+  description : "This plugins allow connexion with netdisco server for gettong some network information as ip range used, vlan spread, position of system in the network (see : https://netdico.org)"
+  version : "0.1"
+  author : ['antoine.gallavardin@free.fr']
+  homeUrl : "https://github.com/gallak/fusiondirectory-plugins-netdisco"
+  ticketUrl : "https://github.com/gallak/fusiondirectory-plugins-netdisco/issues"
+  discussionUrl : "https://github.com/gallak/fusiondirectory-plugins-netdisco/wiki"
+  iconUrl: "https://github.com/gallak/fusiondirectory-plugins-netdisco/icon.png"
+  downloadUrl: "https://github.com/gallak/fusiondirectory-plugins-netdisco/archive/refs/heads/main.zip"
+  schemaUrl : "https://schemas.fusiondirectory.info/"
+  status : DEV
+  screenshotUrl:
+   - https://github.com/gallak/fusiondirectory-plugins-netdisco/icon.png
+  logoUrl : "https://github.com/gallak/fusiondirectory-plugins-netdisco/logo.png"
+  tag: ["network","administration","plugin" ]
+  support :
+    - community
+requirement:
+  fdVersion : 1.4
+  phpVersion : 7.2.0
+content :
+  phpClassList :
+    - 'stackNetDiscoRenderer'
+    - 'netdisco_server'
+    - 'netdiscoDataRenderer'
+    - 'netdiscoDevice'
+    - 'netdiscoRangeIP'
+    - 'netdiscoVlan'
+    - 'netdiscoNode'
+    - 'serviceNetdisco'
+  ldapObjectList :
+    - 'fdNetdiscoServer'
+    - 'fdNetdiscoDevice'
+  ldapAttributeList :
+    - 'fdNetdiscoServerURL'
+    - 'fdNetdiscoServerUser'
+    - 'fdNetdiscoServerPassword'
+    - 'fdNetdiscoDeviceShowVlanMembership'
+    - 'fdNetdiscoDeviceShowPower'
+    - 'fdNetdiscoDeviceType'
+  fileList :
+   - './include/netdisco/restclient.php'
+   - './include/netdisco/class_stackNetDiscoRenderer.inc'
+   - './include/netdisco/class_netdisco.php'
+   - './include/netdisco/class_netdiscoDataRenderer.php'
+   - './admin/systems/netdisco/netdiscoRangeIP.tpl'
+   - './admin/systems/netdisco/netdiscoDeviceInfoIp.tpl'
+   - './admin/systems/netdisco/class_netdiscoDevice.inc'
+   - './admin/systems/netdisco/netdiscoSubnet.tpl'
+   - './admin/systems/netdisco/netdiscoDevice.tpl'
+   - './admin/systems/netdisco/netdiscoDevicePort.tpl'
+   - './admin/systems/netdisco/netdiscoDeviceInfo.tpl'
+   - './admin/systems/netdisco/class_netdiscoRangeIP.inc'
+   - './admin/systems/netdisco/class_netdiscoVlan.inc'
+   - './admin/systems/netdisco/class_netdiscoNode.inc'
+   - './admin/systems/netdisco/netdiscoNode.tpl'
+   - './admin/systems/netdisco/netdiscoVlan.tpl'
+   - './admin/systems/services/netdisco/class_serviceNetdisco.inc'
+   - './locale/fr/fusiondirectory.po'
+   - './locale/en/fusiondirectory.po'
+
