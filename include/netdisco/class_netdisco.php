@@ -42,8 +42,6 @@ class netdisco_server {
     $result = $apiClient->get('/object/'.$request);
     if ( $result->info->http_code == "200" ){
         return($result->decode_response());
-    }else{
-        print( "Error while Remote Objects" );
     }
 }
 
@@ -111,8 +109,6 @@ class netdisco_server {
 
     if ( $result->info->http_code == "200" ){
         return($result->decode_response());
-    }else{
-        print( "Error while Remote reports" );
     }
   }
 
@@ -130,8 +126,6 @@ class netdisco_server {
 
     if ( $result->info->http_code == "200" ){
         return($result->decode_response());
-    }else{
-        print( "Error while Remote Objects" );
     }
   }
 
