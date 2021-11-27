@@ -63,10 +63,19 @@ class netdiscoDevice extends simplePlugin
         // get Topology of device
         $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
         $this->fdNetdiscoTopology=$this->drawDevice($this->setupDeviceTopology($deviceTopology));
-        $this->fdNetdiscoInfo=$deviceInfo;
+        $this->fdNetdiscoInfo=$this->displayInfo($deviceInfo);
 	$this->fdNetdiscoInfoIp=$this->displayIps($this->netdiscoHandler->getDeviceIpsDetails($this->attrs['ipHostNumber'][0]));
 
     }
+  }
+
+  public function displayInfo($data){
+   $render="<table style=\"border: 1px solid black;\">";
+                foreach($data as $field => $value){
+                $render=$render."<tr><td><b>".$field."</b></td><td>".$value."</td></tr>";
+            }
+  $render=$render."</table>Ã";
+  return $render;
   }
 
 
@@ -77,7 +86,6 @@ class netdiscoDevice extends simplePlugin
     $smarty = get_smarty();
     $item = 'ips';
     $displayInformations = array( 'ips'      => array('ip','alias','subnet','port','dns'));
-
 
     $div = new divSelectBox('rows'.$item);
     // set height depending values
@@ -136,7 +144,6 @@ class netdiscoDevice extends simplePlugin
   {
     return [
       'settings' => [
-//       'class' => ['fullwidth'],
         'name'  => _('Device Settings'),
         'attrs' =>[
              new SelectAttribute(_('Physical topology'),_('How device port are organized'),
@@ -173,7 +180,6 @@ class netdiscoDevice extends simplePlugin
         'name'  => _('Device topology'),
         'attrs' => [
              new FakeAttribute('fdNetdiscoTopology'),
-//             new FakeAttribute('fdNetdiscoInfo'),
             ],
           'template' => get_template_path('netdiscoDevice.tpl', TRUE, dirname(__FILE__)),
           ],
