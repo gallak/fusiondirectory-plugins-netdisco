@@ -64,17 +64,17 @@ class netdiscoDevice extends simplePlugin
         $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
         $this->fdNetdiscoTopology=$this->drawDevice($this->setupDeviceTopology($deviceTopology));
         $this->fdNetdiscoInfo=$this->displayInfo($deviceInfo);
-	$this->fdNetdiscoInfoIp=$this->displayIps($this->netdiscoHandler->getDeviceIpsDetails($this->attrs['ipHostNumber'][0]));
+        $this->fdNetdiscoInfoIp=$this->displayIps($this->netdiscoHandler->getDeviceIpsDetails($this->attrs['ipHostNumber'][0]));
 
     }
   }
 
   public function displayInfo($data){
-   $render="<table style=\"border: 1px solid black;\">";
-                foreach($data as $field => $value){
-                $render=$render."<tr><td><b>".$field."</b></td><td>".$value."</td></tr>";
-            }
-  $render=$render."</table>Ã";
+    $render="<table style=\"border: 1px solid black;\">";
+    foreach($data as $field => $value){
+        $render=$render."<tr><td><b>".$field."</b></td><td>".$value."</td></tr>";
+    }
+      $render=$render."</table>Ã";
   return $render;
   }
 
@@ -123,9 +123,9 @@ class netdiscoDevice extends simplePlugin
                     $vlans = $vlans." ".$value->description." (".$value->vlan.")";
                 }
                 $orderedStack[$swNumber - 1][$portNumber -1]['vlan'] = $vlans;
-	    }
+            }
             if ( isset($this->fdNetdiscoDeviceShowPower) && $this->fdNetdiscoDeviceShowPower == 'TRUE'){
-	        $orderedStack[$swNumber - 1][$portNumber -1]['power'] = $this->netdiscoHandler->getDevicePortPower($this->attrs['ipHostNumber'][0],$record->port);
+                $orderedStack[$swNumber - 1][$portNumber -1]['power'] = $this->netdiscoHandler->getDevicePortPower($this->attrs['ipHostNumber'][0],$record->port);
             }
         }
 
@@ -155,6 +155,11 @@ class netdiscoDevice extends simplePlugin
                  'fdNetdiscoDeviceShowPower',FALSE,FALSE),
              new BooleanAttribute(_('Show Vlan Membership'), _('Show Vlan which this ports is belong to'),
                  'fdNetdiscoDeviceShowVlanMembership',FALSE,FALSE),
+             new ButtonAttribute(_('Fetch Informations'), _('Fetch informations'),
+                 'fdNetdiscoUpdate', _('Fetch'),'refresh'
+          ),
+
+
             ],
       ],
       'detailsInfo' => [
@@ -191,7 +196,7 @@ class netdiscoDevice extends simplePlugin
   {
     global $config;
     parent::__construct($dn, $object, $parent, $mainTab);
-    $this->refresh();
+    //$this->refresh();
     $this->ignore_account = TRUE;
   }
 
