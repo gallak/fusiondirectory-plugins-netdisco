@@ -152,8 +152,8 @@ msgstr "NetDisco"
 msgid "netbios"
 msgstr "Historique des informations Netbios"
 
-msgid "no value found"
-msgstr "Pas de valeur" 
+msgid "no value(s) found"
+msgstr "Pas de valeur(s)"
 
 msgid "contact"
 msgstr "Adresse de contact"
@@ -178,3 +178,33 @@ msgstr "Uptime"
 
 msgid "No informations (Mac address has been specified ?)"
 msgstr "Pas d'informations disponible !(L'adresse MAC a t'elle été insérée ?)"
+
+msgid "Fetch Informations"
+msgstr "Recupération des informations"
+
+msgid "Fetch"
+msgstr "Récupération"
+
+msgid "Physical topology"
+msgstr "Topologie physique"
+
+msgid "Show Power status"
+msgstr "Afficher l'état d'alimentation"
+
+msgid "Show Vlan Membership"
+msgstr "Afficher les vlans"
+
+msgid "Device Settings"
+msgstr "Paramètrage de l'équipement"
+
+msgid "Device Details"
+msgstr "Détails de l'équipement"
+
+msgid "Device Ips"
+msgstr "Adresse(s) IP(s) de l'équipement"
+
+msgid "Device topology"
+msgstr "Topologie de l'équipement"
+
+msgid "There is no device inside netdisco system or informations hasn't been updated"
+msgstr "Il n'y a pas d'equipemenent associé dans Netdisco, ou les informations n'ont pas été mises à jours"
