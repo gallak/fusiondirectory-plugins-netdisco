@@ -48,33 +48,38 @@ class netdiscoDevice extends simplePlugin
 
 
 
-
-
-  public function refresh ()
-  {
+  public function getMainInfo () {
     global $config;
-
     $this->connectNetdiscoServer();
     // get Info From device
     $smarty = get_smarty();
     $deviceInfo = $this->netdiscoHandler->getDeviceInfo($this->attrs['ipHostNumber'][0]);
-
     if (! is_null($deviceInfo)){
-        // get Topology of device
-        $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
-        $this->fdNetdiscoTopology=$this->drawDevice($this->setupDeviceTopology($deviceTopology));
         $this->fdNetdiscoInfo=$this->displayInfo($deviceInfo);
         $this->fdNetdiscoInfoIp=$this->displayIps($this->netdiscoHandler->getDeviceIpsDetails($this->attrs['ipHostNumber'][0]));
-
     }
   }
 
+
+
+  public function refreshAndGetTopology ()
+  {
+      $this->getMainInfo();
+      $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
+      $this->fdNetdiscoTopology=$this->drawDevice($this->setupDeviceTopology($deviceTopology));
+  }
+
+
+// a récrire
   public function displayInfo($data){
-    $render="<table style=\"border: 1px solid black;\">";
-    foreach($data as $field => $value){
-        $render=$render."<tr><td><b>".$field."</b></td><td>".$value."</td></tr>";
+    $infos_displayed=array( 'deviceInfo' => array('description','serial','layers','uptime','mac','last_discover','last_macsuck','last_arpnip','creation'));
+    $item = 'deviceInfo';
+    $netdiscoData = new netdiscoDataRenderer();
+    $render="<table>";
+    foreach($infos_displayed[$item] as $info){
+        $render=$render."<tr><td><b>"._($info)."</b></td><td>".$netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$info],$data->{$info})."</td></tr>";
     }
-      $render=$render."</table>Ã";
+    $render=$render."</table>";
   return $render;
   }
 
@@ -99,7 +104,7 @@ class netdiscoDevice extends simplePlugin
     foreach ($ipInfo as &$record) {
         $fields=array();
         foreach ($displayInformations[$item] as $field){
-            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getDictionnary($item)[$field]['type'] ,$record->$field)];
+            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$field] ,$record->$field)];
         }
         $div->addEntry($fields);
     }
@@ -156,7 +161,7 @@ class netdiscoDevice extends simplePlugin
              new BooleanAttribute(_('Show Vlan Membership'), _('Show Vlan which this ports is belong to'),
                  'fdNetdiscoDeviceShowVlanMembership',FALSE,FALSE),
              new ButtonAttribute(_('Fetch Informations'), _('Fetch informations'),
-                 'fdNetdiscoUpdate', _('Fetch'),'refresh'
+                 'fdNetdiscoUpdate', _('Fetch'),'refreshAndGetTopology'
           ),
 
 
@@ -196,7 +201,7 @@ class netdiscoDevice extends simplePlugin
   {
     global $config;
     parent::__construct($dn, $object, $parent, $mainTab);
-    //$this->refresh();
+    $this->getMainInfo();
     $this->ignore_account = TRUE;
   }
 
