@@ -134,6 +134,12 @@ msgstr "Première vue"
 msgid "time_last_stamp"
 msgstr "Dernière vue"
 
+msgid "time_first"
+msgstr "Première vue"
+
+msgid "time_last"
+msgstr "Dernière vue"
+
 msgid "type"
 msgstr "Type"
 
@@ -180,10 +186,10 @@ msgid "No informations (Mac address has been specified ?)"
 msgstr "Pas d'informations disponible !(L'adresse MAC a t'elle été insérée ?)"
 
 msgid "Fetch Informations"
-msgstr "Recupération des informations"
+msgstr "Recupération de la topologie"
 
 msgid "Fetch"
-msgstr "Récupération"
+msgstr "Récupération !"
 
 msgid "Physical topology"
 msgstr "Topologie physique"
@@ -208,3 +214,39 @@ msgstr "Topologie de l'équipement"
 
 msgid "There is no device inside netdisco system or informations hasn't been updated"
 msgstr "Il n'y a pas d'equipemenent associé dans Netdisco, ou les informations n'ont pas été mises à jours"
+
+msgid "serial"
+msgstr "N° de série"
+
+msgid "last_discover"
+msgstr "Dernière découverte"
+
+msgid "last_macsuck"
+msgstr "Dernier audit des mac"
+
+msgid "last_arpnip"
+msgstr "Dernier audit ARP"
+
+msgid "age"
+msgstr "Âge"
+
+msgid "Subnet statistics"
+msgstr "Statistiques des sous réseaux"
+
+msgid "Inventory"
+msgstr "Inventaire"
+
+msgid "NetdiscoRangeIP"
+msgstr "Netdisco - plage"
+
+msgid "NetdiscoVlan"
+msgstr "Netdisco - Vlan"
+
+msgid "vlans"
+msgstr "Vlans"
+
+msgid "os"
+msgstr "Système"
+
+msgid "pcount"
+msgstr "nb ports"

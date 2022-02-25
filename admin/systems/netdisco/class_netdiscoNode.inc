@@ -59,7 +59,7 @@ class netdiscoNode extends simplePlugin
             $arrayNodeInfo[$mac] = $this->displayNode($nodeInfo);
         }else{
             $netdiscoData=new netdiscoDataRenderer();
-            foreach ($netdiscoData->getDictionnary('node') as $key => $value){
+            foreach ($netdiscoData->getOutputType('node') as $key => $value){
                 $arrayNodeInfo[$mac][$key] = _('not information available');
             }
         }
@@ -87,14 +87,14 @@ class netdiscoNode extends simplePlugin
             $div->setHeight(count(array_keys($deviceInfo->$item)) * 30 + 40);
             $headers=array();
             foreach ($displayInformations[$item] as $field){
-		$headers[]=_($field);
+        $headers[]=_($field);
             }
             $div->setHeaders($headers);
 
             foreach ($deviceInfo->$item as &$record) {
                 $fields=array();
                 foreach ($displayInformations[$item] as $field){
-                    $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getDictionnary('node')[$item][$field]['type'] ,$record->$field)];
+                    $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType('node')[$item][$field] ,$record->$field)];
                 }
             $div->addEntry($fields);
             }

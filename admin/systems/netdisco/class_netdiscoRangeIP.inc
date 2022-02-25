@@ -58,7 +58,7 @@ class netdiscoRangeIP extends simplePlugin
         $subnetDisplayInfo = $this->displaySubnet($subnetInfo);
     }
     if ($ipInventoryInfo) {
-	$ipInventoryDisplayInfo = $this->displayInventory($ipInventoryInfo);
+    $ipInventoryDisplayInfo = $this->displayInventory($ipInventoryInfo);
     }
 
     $this->fdNetdiscoReportSubnet = $subnetDisplayInfo;
@@ -87,8 +87,8 @@ class netdiscoRangeIP extends simplePlugin
     foreach ($subnetInfo as &$record) {
         $fields=array();
 
-	foreach ($displayInformations[$item] as $field){
-            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getDictionnary($item)[$field]['type'] ,$record->$field)];
+    foreach ($displayInformations[$item] as $field){
+            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$field] ,$record->$field)];
         }
         $div->addEntry($fields);
     }
@@ -119,7 +119,7 @@ class netdiscoRangeIP extends simplePlugin
     foreach ($subnetInfo as &$record) {
         $fields=array();
         foreach ($displayInformations[$item] as $field){
-            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getDictionnary($item)[$field]['type'] ,$record->$field)];
+            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$field] ,$record->$field)];
         }
         $div->addEntry($fields);
     }

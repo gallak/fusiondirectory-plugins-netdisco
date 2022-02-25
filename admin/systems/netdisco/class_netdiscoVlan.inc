@@ -54,7 +54,7 @@ class netdiscoVlan extends simplePlugin
     $this->connectNetdiscoServer();
     $vlanInfo = $this->netdiscoHandler->getSearchVlan(array('q'=> $this->attrs['fdIpamVlanInnerId'][0]));
     if ($vlanInfo) {
-	$vlanDisplayInfo = $this->displayVlan($vlanInfo);
+    $vlanDisplayInfo = $this->displayVlan($vlanInfo);
     }
 
     $this->fdNetdiscoReportVlan = $vlanDisplayInfo;
@@ -81,8 +81,8 @@ class netdiscoVlan extends simplePlugin
     foreach ($vlanInfo as &$record) {
         $fields=array();
 
-	foreach ($displayInformations[$item] as $field){
-            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getDictionnary($item)[$field]['type'] ,$record->$field)];
+    foreach ($displayInformations[$item] as $field){
+            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$field] ,$record->$field)];
         }
         $div->addEntry($fields);
     }
