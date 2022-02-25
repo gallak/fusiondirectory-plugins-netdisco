@@ -7,10 +7,10 @@ array(
   'deviceInfo' =>
         array(
                 'ip'               => 'string',
-                'uptime'           => 'string',
+                'uptime'           => 'uptime',
                 'ps2_status'       => 'string',
                 'mac'              => 'string',
-                'layers'           => 'string',
+                'layers'           => 'osiLayer',
                 'vtp_domain'       => 'string',
                 'snmp_comm'        => 'string',
                 'dns'              => 'string',
@@ -148,6 +148,32 @@ array(
         return($this->netdiscoDataDictionnary[$info]);
     }
 
+    function renderOsiLayers($layer){
+      $layerRender="";
+      foreach (str_split(strrev($layer)) as $key => $value){
+          if ($value == 1){
+            $layerRender=$layerRender."[".($key+1)."]";
+          }else{
+            $layerRender=$layerRender."[_]";
+          }
+      }
+      return($layerRender);
+    }
+
+
+    function renderUptime($uptime){
+      // uptime is in * 100 second
+        $sec=$uptime / 100;
+        var_dump($sec);
+        $years=intval($sec/(3600*24*365));
+        $days = intval(($sec - ($years* 3600*24*365))/(3600*24));
+        $hours = intval(($sec - ($years*3600*24*365 + $days*24*3600 ))/3600);
+        $minutes = intval(($sec - ($years*3600*24*365 + $days *24*3600 + $hours * 3600 ))/60);
+
+        return( $years." "._("years")." ".$days." "._("days")." ".$hours." "._("hours")." ".$minutes." "._("minutes"));
+    }
+
+
     function getRenderValue($type='', $value = ''){
         if ( $value ){
             if (is_string($type)){
@@ -170,6 +196,12 @@ array(
                         break;
                     case "oui":
                         return($value->company);
+                        break;
+                    case "osiLayer":
+                        return($this->renderOsiLayers($value));
+                        break;
+                    case "uptime":
+                        return($this->renderUptime($value));
                         break;
                     default:
                         return ($value);
