@@ -36,9 +36,9 @@ class netdiscoDevice extends simplePlugin
   static function plInfo (): array
   {
     return [
-      'plShortName'   => _('Netdisco'),
-      'plDescription' => _('Netdisco'),
-      'plTitle'       => _('Netdisco'),
+      'plShortName'   => _('Netdisco Device'),
+      'plDescription' => _('Netdisco Device '),
+      'plTitle'       => _('Netdisco Device'),
       'plPriority'    => 30,
       'plObjectClass'     => ['netdiscoDevice'],
       'plObjectType'  => ['component' ],

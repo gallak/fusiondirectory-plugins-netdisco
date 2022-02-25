@@ -34,11 +34,11 @@ class netdiscoNode extends simplePlugin
   static function plInfo (): array
   {
     return [
-      'plShortName'   => _('NetdiscoNode'),
+      'plShortName'   => _('Netdisco Node'),
       'plDescription' => _('Netdisco Node'),
       'plPriority'    => 30,
       'plObjectClass' => [],
-      'plObjectType'  => ['workstation','server'],
+      'plObjectType'  => ['workstation','server','printer','phone','component'],
       'plProvidedAcls'  => parent::generatePlProvidedAcls(static::getAttributesInfo())
     ];
   }
