@@ -46,49 +46,42 @@ array(
                 'ip'               => 'string',
                 'dns'              => 'string',
                 'subnet'           => 'string',
-            ),
-  'node' =>
-        array('ips' =>
-            array(
-                'time_last_stamp'   => 'datetime',
-                'time_first_stamp'  => 'datetime',
+                'oui'               => 'oui',
+                'mac'               => 'string',
                 'active'            => 'bool',
-                'ip'                => 'string',
-                'mac'               => 'string',
-                'dns'               => 'string',
-                'oui'               => 'oui',
-            ),
-          'sightings' =>
-            array(
-                'time_last_stamp'   => 'datetime',
-                'time_first_stamp'  => 'datetime',
-                'device'            => 'string',
-                'vlan'              => 'string',
-                'mac'               => 'string',
-                'switch'            => 'string',
-                'active'            => 'boolean',
-                'port'              => 'string',
-            ),
-        'netbios' =>
-            array (
-                'time_last_stamp'   => 'datetime',
-                'time_first_stamp'  => 'datetime',
-                'domain'            => 'string',
-                'ip'                => 'string',
-                'mac'               => 'string',
-                'nbuser'            => 'string',
-                'nbname'            => 'string',
-                'active'            => 'boolean',
-                'server'            => 'boolean',
-                'oui'               => 'oui',
-            ),
-        'wireless' =>
-            array (
                 'time_last_stamp'   => 'datetime',
                 'time_first_stamp'  => 'datetime',
             ),
+  'sightings' =>
+        array(
+            'time_last_stamp'   => 'datetime',
+            'time_first_stamp'  => 'datetime',
+            'device'            => 'string',
+            'vlan'              => 'string',
+            'mac'               => 'string',
+            'switch'            => 'string',
+            'active'            => 'boolean',
+            'port'              => 'string',
         ),
-    'deviceports' =>
+  'netbios' =>
+        array (
+            'time_last_stamp'   => 'datetime',
+            'time_first_stamp'  => 'datetime',
+            'domain'            => 'string',
+            'ip'                => 'string',
+            'mac'               => 'string',
+            'nbuser'            => 'string',
+            'nbname'            => 'string',
+            'active'            => 'boolean',
+            'server'            => 'boolean',
+            'oui'               => 'oui',
+        ),
+  'wireless' =>
+        array (
+            'time_last_stamp'   => 'datetime',
+            'time_first_stamp'  => 'datetime',
+        ),
+  'deviceports' =>
         array(
             'duplex'          => 'string',
             'name'            => 'string',
@@ -164,7 +157,6 @@ array(
     function renderUptime($uptime){
       // uptime is in * 100 second
         $sec=$uptime / 100;
-        var_dump($sec);
         $years=intval($sec/(3600*24*365));
         $days = intval(($sec - ($years* 3600*24*365))/(3600*24));
         $hours = intval(($sec - ($years*3600*24*365 + $days*24*3600 ))/3600);
