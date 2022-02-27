@@ -21,7 +21,7 @@ msgid "not information available"
 msgstr "Aucune informations disponible"
 
 msgid "Mac address"
-msgstr "Addresse MAC"
+msgstr "Adresse MAC"
 
 msgid "sightings"
 msgstr "Historique des observations"
@@ -126,7 +126,7 @@ msgid "subnet_size"
 msgstr "Taille du sous réseau"
 
 msgid "switch"
-msgstr "Swicth"
+msgstr "Switch"
 
 msgid "time_first_stamp"
 msgstr "Première vue"
@@ -250,3 +250,6 @@ msgstr "Système"
 
 msgid "pcount"
 msgstr "nb ports"
+
+msgid "wireless"
+msgstr "Information Sans fils"
