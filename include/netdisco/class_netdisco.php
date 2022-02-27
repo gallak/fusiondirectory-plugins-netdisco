@@ -2,6 +2,48 @@
 
 require_once("netdisco/restclient.php");
 
+
+function displayTable($data,$dict){
+
+    $netdiscoData = new netdiscoDataRenderer();
+    $arrayDiv=array();
+    $smarty = get_smarty();
+
+    foreach ($data as $item => $values){
+        if ($values) {
+            $div = new divSelectBox('rows'.$item);
+            // set height depending values
+            $div->setHeight(count(array_keys($values)) * 26 + 40);
+            $headers=array();
+            foreach ($dict[$item] as $field) {
+                $headers[]=_($field);
+            }
+            $div->setHeaders($headers);
+
+            foreach ($values as &$record) {
+                $fields=array();
+                foreach ($dict[$item] as $field){
+                    $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$field] ,$record->$field)];
+                }
+                $div->addEntry($fields);
+            }
+            $arrayDiv[$item] = $div->drawList();
+        }
+
+    }
+    return $arrayDiv;
+}
+
+  function displayList($data,$dict){
+    $item = array_key_first($dict);
+    $netdiscoData = new netdiscoDataRenderer();
+    foreach($dict[$item] as $info){
+        $listRender[$info]=$netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$info],$data->{$info});
+    }
+    return $listRender;
+  }
+
+
 class netdisco_server {
   private $server_token = "";
   private $server_url = "";
@@ -10,7 +52,7 @@ class netdisco_server {
   private $password = "";
   private $obj = "/object/device";
 
-  // constructueur
+  // constructeur
   public function __construct($server, $username, $password){
     $this->server_url=$server;
     $this->username=$username;
@@ -66,7 +108,7 @@ class netdisco_server {
    }
 
    public function getDeviceIpsDetails($ip=''){
-	return($this->getRemoteObjects('device/'.$ip.'/device_ips'));
+    return($this->getRemoteObjects('device/'.$ip.'/device_ips'));
    }
 
 

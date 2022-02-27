@@ -55,80 +55,17 @@ class netdiscoRangeIP extends simplePlugin
     $subnetInfo = $this->netdiscoHandler->getReportIpSubnets(array('subnet'=> $this->attrs['fdIpamSubnetCIDR'][0] ));
     $ipInventoryInfo = $this->netdiscoHandler->getReportIpInventory(array('subnet'=> $this->attrs['fdIpamSubnetCIDR'][0] ));
     if ($subnetInfo) {
-        $subnetDisplayInfo = $this->displaySubnet($subnetInfo);
+        $subnetDisplayInfo = displayTable(array('subnet' => $subnetInfo),
+            array( 'subnet' => array('subnet','subnet_size','active','percent')));
     }
     if ($ipInventoryInfo) {
-    $ipInventoryDisplayInfo = $this->displayInventory($ipInventoryInfo);
+        $ipInventoryDisplayInfo = displayTable(array('inventory' => $ipInventoryInfo),
+            array( 'inventory'  => array('dns','ip','mac','vendor','age','time_first','time_last')));
     }
 
     $this->fdNetdiscoReportSubnet = $subnetDisplayInfo;
     $this->fdNetdiscoReportIpInventory = $ipInventoryDisplayInfo;
   }
-
-  public function displaySubnet($subnetInfo){
-
-
-  $netdiscoData = new netdiscoDataRenderer();
-    $arrayDiv=array();
-    $smarty = get_smarty();
-    $item = 'subnet';
-    $displayInformations = array( 'subnet'       => array('subnet','subnet_size','active','percent'));
-
-
-    $div = new divSelectBox('rows'.$item);
-    // set height depending values
-    $div->setHeight(count(array_keys($subnetInfo)) * 30 + 40);
-    $headers=array();
-    foreach ($displayInformations[$item] as $field) {
-        $headers[]=_($field);
-        }
-    $div->setHeaders($headers);
-
-    foreach ($subnetInfo as &$record) {
-        $fields=array();
-
-    foreach ($displayInformations[$item] as $field){
-            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$field] ,$record->$field)];
-        }
-        $div->addEntry($fields);
-    }
-    return $div->drawList();
-
- }
-
-
-  public function displayInventory($subnetInfo){
-
-
-  $netdiscoData = new netdiscoDataRenderer();
-    $arrayDiv=array();
-    $smarty = get_smarty();
-    $item = 'inventory';
-    $displayInformations = array( 'inventory'  => array('dns','ip','mac','vendor','age','time_first','time_last'));
-
-
-    $div = new divSelectBox('rows'.$item);
-    // set height depending values
-    $div->setHeight(count(array_keys($subnetInfo)) * 30 + 40);
-    $headers=array();
-    foreach ($displayInformations[$item] as $field) {
-        $headers[]=_($field);
-        }
-    $div->setHeaders($headers);
-
-    foreach ($subnetInfo as &$record) {
-        $fields=array();
-        foreach ($displayInformations[$item] as $field){
-            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$field] ,$record->$field)];
-        }
-        $div->addEntry($fields);
-    }
-    return $div->drawList();;
-
- }
-
-
-
 
 
   static function getAttributesInfo (): array

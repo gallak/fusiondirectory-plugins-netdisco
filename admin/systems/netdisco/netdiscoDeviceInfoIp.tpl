@@ -3,8 +3,12 @@
     {if $sectionIcon}<img src="{$sectionIcon|escape}" alt=""/>{/if}{$section|escape}
   </span>
   <div>
-
-    {$attributes.fdNetdiscoInfoIp}
+        {foreach $attributes.fdNetdiscoInfoIp as $value}
+        <div>
+                {$value}
+        </div>
+        {/foreach}
+    <!-- {$attributes.fdNetdiscoInfoIp} -->
 </div>
 </div>
 

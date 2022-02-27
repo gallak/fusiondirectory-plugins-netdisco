@@ -54,41 +54,11 @@ class netdiscoVlan extends simplePlugin
     $this->connectNetdiscoServer();
     $vlanInfo = $this->netdiscoHandler->getSearchVlan(array('q'=> $this->attrs['fdIpamVlanInnerId'][0]));
     if ($vlanInfo) {
-    $vlanDisplayInfo = $this->displayVlan($vlanInfo);
+        $vlanDisplayInfo = displayTable(array('vlan' => $vlanInfo),array( 'vlan'      => array('ip','os','model','pcount','dns','vendor','vlans')));
     }
 
     $this->fdNetdiscoReportVlan = $vlanDisplayInfo;
   }
-
-  public function displayVlan($vlanInfo){
-
-    $netdiscoData = new netdiscoDataRenderer();
-    $arrayDiv=array();
-    $smarty = get_smarty();
-    $item = 'vlan';
-    $displayInformations = array( 'vlan'      => array('ip','os','model','pcount','dns','vendor','vlans'));
-
-
-    $div = new divSelectBox('rows'.$item);
-    // set height depending values
-    $div->setHeight(count(array_keys($vlanInfo)) * 30 + 40);
-    $headers=array();
-    foreach ($displayInformations[$item] as $field) {
-        $headers[]=_($field);
-        }
-    $div->setHeaders($headers);
-
-    foreach ($vlanInfo as &$record) {
-        $fields=array();
-
-    foreach ($displayInformations[$item] as $field){
-            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$field] ,$record->$field)];
-        }
-        $div->addEntry($fields);
-    }
-    return $div->drawList();
- }
-
 
 
   static function getAttributesInfo (): array

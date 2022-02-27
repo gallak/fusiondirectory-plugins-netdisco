@@ -2,10 +2,10 @@
   <span class="legend">
     {if $sectionIcon}<img src="{$sectionIcon|escape}" alt=""/>{/if}{$section|escape}
   </span>
- <div>
-
-{$attributes.fdNetdiscoReportIpInventory}
-  </div>
-
- </div>
+    <div>
+        {foreach $attributes.fdNetdiscoReportIpInventory as $value}
+                {$value}
+        {/foreach}
+    </div>
+</div>
 

@@ -45,8 +45,6 @@ class netdiscoNode extends simplePlugin
 
 
 
-
-
   public function refresh ()
   {
     global $config;
@@ -56,53 +54,16 @@ class netdiscoNode extends simplePlugin
     foreach ( $this->attrs['macAddress'] as $mac ){
         $nodeInfo = $this->netdiscoHandler->getSearchNode(array('q'=> $mac));
         if ($nodeInfo) {
-            $arrayNodeInfo[$mac] = $this->displayNode($nodeInfo);
-        }else{
-            $netdiscoData=new netdiscoDataRenderer();
-            foreach ($netdiscoData->getOutputType('node') as $key => $value){
-                $arrayNodeInfo[$mac][$key] = _('not information available');
-            }
+            $arrayNodeInfo[$mac] = displayTable($nodeInfo,
+                                array( 'ips' => array('time_last_stamp','time_first_stamp','ip','dns','oui'),
+                                        'sightings' => array('time_last_stamp','time_first_stamp','switch','port','vlan'),
+                                        'netbios'   => array('time_last_stamp','time_first_stamp','nbname','nbuser','domain','ip'),
+                                        'wireless' => array ('time_last_stamp','time_first_stamp')
+                                        ),
+                                );
         }
     }
-    array_shift($arrayNodeInfo);
     $this->fdNetdiscoTrace = $arrayNodeInfo;
-  }
-
-  public function displayNode ($deviceInfo){
-
-
-    $netdiscoData = new netdiscoDataRenderer();
-    $arrayDiv=array();
-    $smarty = get_smarty();
-    // what to display
-    $displayInformations = array( 'ips'       => array('time_last_stamp','time_first_stamp','ip','dns','oui'),
-                                  'sightings' => array('time_last_stamp','time_first_stamp','switch','port','vlan'),
-                                  'netbios'   => array('time_last_stamp','time_first_stamp','nbname','nbuser','domain','ip')
-                               );
-
-    foreach ($deviceInfo as $item => $value){
-        if ($value) {
-            $div = new divSelectBox('rows'.$item);
-            // set height depending values
-            $div->setHeight(count(array_keys($deviceInfo->$item)) * 30 + 40);
-            $headers=array();
-            foreach ($displayInformations[$item] as $field){
-        $headers[]=_($field);
-            }
-            $div->setHeaders($headers);
-
-            foreach ($deviceInfo->$item as &$record) {
-                $fields=array();
-                foreach ($displayInformations[$item] as $field){
-                    $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType('node')[$item][$field] ,$record->$field)];
-                }
-            $div->addEntry($fields);
-            }
-        $arrayDiv[$item] = $div->drawList();
-        }
-
-    }
-    return $arrayDiv;
   }
 
 

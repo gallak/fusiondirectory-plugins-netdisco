@@ -55,8 +55,8 @@ class netdiscoDevice extends simplePlugin
     $smarty = get_smarty();
     $deviceInfo = $this->netdiscoHandler->getDeviceInfo($this->attrs['ipHostNumber'][0]);
     if (! is_null($deviceInfo)){
-        $this->fdNetdiscoInfo=$this->displayInfo($deviceInfo);
-        $this->fdNetdiscoInfoIp=$this->displayIps($this->netdiscoHandler->getDeviceIpsDetails($this->attrs['ipHostNumber'][0]));
+        $this->fdNetdiscoInfo=displayList($deviceInfo,array( 'deviceInfo' => array('description','serial','layers','uptime','mac','last_discover','last_macsuck','last_arpnip','creation')));
+        $this->fdNetdiscoInfoIp=displayTable(array('ips' => $this->netdiscoHandler->getDeviceIpsDetails($this->attrs['ipHostNumber'][0])),array( 'ips'=> array('ip','alias','subnet','port','dns')));
     }
   }
 
@@ -68,50 +68,6 @@ class netdiscoDevice extends simplePlugin
       $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
       $this->fdNetdiscoTopology=$this->drawDevice($this->setupDeviceTopology($deviceTopology));
   }
-
-
-// a récrire
-  public function displayInfo($data){
-    $infos_displayed=array( 'deviceInfo' => array('description','serial','layers','uptime','mac','last_discover','last_macsuck','last_arpnip','creation'));
-    $item = 'deviceInfo';
-    $netdiscoData = new netdiscoDataRenderer();
-    $render="<table>";
-    foreach($infos_displayed[$item] as $info){
-        $render=$render."<tr><td><b>"._($info)."</b></td><td>".$netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$info],$data->{$info})."</td></tr>";
-    }
-    $render=$render."</table>";
-  return $render;
-  }
-
-
-  public function displayIps($ipInfo){
-
-    $netdiscoData = new netdiscoDataRenderer();
-    $arrayDiv=array();
-    $smarty = get_smarty();
-    $item = 'ips';
-    $displayInformations = array( 'ips'      => array('ip','alias','subnet','port','dns'));
-
-    $div = new divSelectBox('rows'.$item);
-    // set height depending values
-    $div->setHeight(count(array_keys($ipInfo)) * 30 + 40);
-    $headers=array();
-    foreach ($displayInformations[$item] as $field) {
-        $headers[]=_($field);
-        }
-    $div->setHeaders($headers);
-
-    foreach ($ipInfo as &$record) {
-        $fields=array();
-        foreach ($displayInformations[$item] as $field){
-            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$field] ,$record->$field)];
-        }
-        $div->addEntry($fields);
-    }
-    return $div->drawList();
- }
-
-
 
   // increase information per port ( power / vlan )
   private function setupDeviceTopology($deviceTopology){
