@@ -6,7 +6,7 @@ information :
   status : "development"
   screenshotUrl:
    - https://github.com/gallak/fusiondirectory-plugins-netdisco/icon.png
-  logoUrl : "https://github.com/gallak/fusiondirectory-plugins-netdisco/logo.png"
+  logoUrl : "https://raw.githubusercontent.com/gallak/fusiondirectory-plugins-netdisco/main/html/themes/breezy/icons/16/apps/netdisco.png"
   tags : ["admin","network","plugin","api" ]
   license : "GPLv2"
   origin : "source"
