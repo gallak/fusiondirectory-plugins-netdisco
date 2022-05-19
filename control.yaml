@@ -1,11 +1,13 @@
 information :
   name : "netdisco"
-  description : "This plugins allow connexion with netdisco server for gettong some network information as ip range used, vlan spread, position of system in the network (see : https://netdico.org)"
+  description : "This plugins allow connexion with netdisco server for getting some network information as ip range used, vlan spread, position of system in the network (see : https://netdisco.org)"
   version : "0.1"
   authors : ['antoine.gallavardin@free.fr']
   status : "development"
   screenshotUrl:
-   - https://github.com/gallak/fusiondirectory-plugins-netdisco/icon.png
+   - 'https://raw.githubusercontent.com/gallak/fusiondirectory-plugins-netdisco/main/docs/netdisco-device.png'
+   - 'https://raw.githubusercontent.com/gallak/fusiondirectory-plugins-netdisco/main/docs/netdisco-ipam.png'
+   - 'https://raw.githubusercontent.com/gallak/fusiondirectory-plugins-netdisco/main/docs/netdisco-node-info.png'
   logoUrl : "https://raw.githubusercontent.com/gallak/fusiondirectory-plugins-netdisco/main/html/themes/breezy/icons/16/apps/netdisco.png"
   tags : ["admin","network","plugin","api" ]
   license : "GPLv2"
