@@ -1,5 +1,10 @@
 <div>
 
+{foreach $attributes.fdNetdiscoNodeServiceDn as $plop}
+{$plop}
+{/foreach}
+
+
 {if $attributes.fdNetdiscoTrace}
 {foreach $attributes.fdNetdiscoTrace as $macInfo}
 <div id="{$macInfo@key}" class="plugin-section">

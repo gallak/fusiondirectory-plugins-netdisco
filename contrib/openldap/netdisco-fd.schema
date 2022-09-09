@@ -43,6 +43,20 @@ attributetype ( 1.3.6.1.4.1.38414.125.1.6 NAME 'fdNetdiscoDeviceType'
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
         SINGLE-VALUE )
 
+attributetype ( 1.3.6.1.4.1.38414.125.1.7 NAME 'fdNetdiscoNodeServiceDn'
+        DESC 'FusionDirectory - Netdisco Service which node is associated to'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.38414.125.1.8 NAME 'fdNetdiscoDeviceServiceDn'
+        DESC 'FusionDirectory - Netdisco Service which device is associated to'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+        SINGLE-VALUE )
+
 # Object Class
 objectclass (1.3.6.1.4.1.38414.125.2.1 NAME 'fdNetdiscoServer'
         SUP top AUXILIARY
@@ -53,7 +67,14 @@ objectclass (1.3.6.1.4.1.38414.125.2.1 NAME 'fdNetdiscoServer'
 objectclass (1.3.6.1.4.1.38414.125.2.2 NAME 'fdNetdiscoDevice'
         SUP top AUXILIARY
         DESC 'FusionDirectory - Netdisco Device'
-        MUST ( cn )
+        MUST ( cn $ fdNetdiscoDeviceServiceDn )
         MAY ( fdNetdiscoDeviceType $ fdNetdiscoDeviceShowPower $ fdNetdiscoDeviceShowVlanMembership) )
+
+
+objectclass (1.3.6.1.4.1.38414.125.2.3 NAME 'fdNetdiscoNode'
+        SUP top AUXILIARY
+        DESC 'FusionDirectory - Netdisco Node'
+        MUST ( cn $ fdNetdiscoNodeServiceDn ) )
+
 
 

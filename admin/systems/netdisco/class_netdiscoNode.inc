@@ -28,8 +28,12 @@ class netdiscoNode extends simplePlugin
 
   public $netdiscoHandler;
 
-  protected $displayHeader  = FALSE;
-  protected $loaded = FALSE;
+  protected $displayHeader  = TRUE;
+  protected $loaded = TRUE;
+
+  public $allNdServer = array();
+  public $currentServer ="";
+
 
   static function plInfo (): array
   {
@@ -37,7 +41,7 @@ class netdiscoNode extends simplePlugin
       'plShortName'   => _('Netdisco Node'),
       'plDescription' => _('Netdisco Node'),
       'plPriority'    => 30,
-      'plObjectClass' => [],
+      'plObjectClass' => ['fdNetdiscoNode'],
       'plObjectType'  => ['workstation','server','printer','phone','component'],
       'plProvidedAcls'  => parent::generatePlProvidedAcls(static::getAttributesInfo())
     ];
@@ -48,8 +52,9 @@ class netdiscoNode extends simplePlugin
   public function refresh ()
   {
     global $config;
-
     $this->connectNetdiscoServer();
+
+
     $arrayNodeInfo = array();
     foreach ( $this->attrs['macAddress'] as $mac ){
         $nodeInfo = $this->netdiscoHandler->getSearchNode(array('q'=> $mac));
@@ -70,6 +75,14 @@ class netdiscoNode extends simplePlugin
   static function getAttributesInfo (): array
   {
     return [
+      'nodeConfig' => [
+        'class' => ['fullwidth'],
+        'name'  => _('Node Config'),
+        'attrs' => [
+             new netdiscoServerSelectAttribute (_('Netdisco Service'),_('Name of server where the client is connected to'),
+                'fdNetdiscoNodeServiceDn',TRUE),
+            ],
+          ],
       'nodeTrace' => [
         'class' => ['fullwidth'],
         'name'  => _('Node Trace'),
@@ -78,6 +91,7 @@ class netdiscoNode extends simplePlugin
             ],
           'template' => get_template_path('netdiscoNode.tpl', TRUE, dirname(__FILE__)),
           ],
+
     ];
   }
 
@@ -85,8 +99,11 @@ class netdiscoNode extends simplePlugin
   function __construct ($dn = NULL, $object = NULL, $parent = NULL, $mainTab = FALSE)
   {
 
-    parent::__construct($dn, $object, $parent, $mainTab);
-    $this->refresh();
+  parent::__construct($dn, $object, $parent, $mainTab);
+  if (isset($this->attrs['fdNetdiscoNodeServiceDn'])){
+	    $currentServer=$this->attrs['fdNetdiscoNodeServiceDn'];
+	    $this->refresh();
+	  }
     $this->ignore_account = FALSE;  // affiche l'activation ou pas du plugin
   }
 
@@ -96,15 +113,18 @@ class netdiscoNode extends simplePlugin
 
       global $config;
 
-
       $ldap = $config->get_ldap_link();
+      $ldap->cd($this->fdNetdiscoNodeServiceDn);
+
+      var_dump($this->fdNetdiscoNodeServiceDn);
+
       $ldap->search('(objectClass=fdNetdiscoServer)', ['fdNetdiscoServerURL','fdNetdiscoServerUser','fdNetdiscoServerPassword']);
       $attrs = $ldap->fetch();
 
       $uServer = $attrs['fdNetdiscoServerURL'][0];
       $uUser   = $attrs['fdNetdiscoServerUser'][0];
       $uPass   = $attrs['fdNetdiscoServerPassword'][0];
-
+      
       $this->netdiscoHandler = new netdisco_server($uServer,$uUser,$uPass);
       return($this->netdiscoHandler->doLogin());
 

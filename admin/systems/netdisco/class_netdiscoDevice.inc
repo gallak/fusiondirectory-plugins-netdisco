@@ -28,7 +28,7 @@ class netdiscoDevice extends simplePlugin
 
   public $netdiscoHandler;
 
-  protected $displayHeader  = FALSE;
+  protected $displayHeader  = TRUE;
   protected $loaded = TRUE;
 
   var $objectclasses = array('fdNetdiscoDevice');
@@ -40,7 +40,7 @@ class netdiscoDevice extends simplePlugin
       'plDescription' => _('Netdisco Device '),
       'plTitle'       => _('Netdisco Device'),
       'plPriority'    => 30,
-      'plObjectClass'     => ['netdiscoDevice'],
+      'plObjectClass'     => ['fdNetdiscoDevice'],
       'plObjectType'  => ['component' ],
       'plProvidedAcls'  => parent::generatePlProvidedAcls(static::getAttributesInfo())
     ];
@@ -107,6 +107,8 @@ class netdiscoDevice extends simplePlugin
       'settings' => [
         'name'  => _('Device Settings'),
         'attrs' =>[
+             new netdiscoServerSelectAttribute (_('Netdisco Service'),_('Name of server where the client is connected to'),
+                        'fdNetdiscoDeviceServiceDn',TRUE),
              new SelectAttribute(_('Physical topology'),_('How device port are organized'),
                  'fdNetdiscoDeviceType',TRUE,
                  array('2-leftup','2-leftdown','4-leftup','4-leftdown','1-leftup'),'2-leftup',
@@ -157,8 +159,11 @@ class netdiscoDevice extends simplePlugin
   {
     global $config;
     parent::__construct($dn, $object, $parent, $mainTab);
-    $this->getMainInfo();
-    $this->ignore_account = TRUE;
+    if (isset($this->attrs['fdNetdiscoDeviceServiceDn'])){
+        $currentServer=$this->attrs['fdNetdiscoDeviceServiceDn'];
+	$this->getMainInfo();
+        }
+    $this->ignore_account = FALSE;
   }
 
 
@@ -169,6 +174,7 @@ class netdiscoDevice extends simplePlugin
 
 
       $ldap = $config->get_ldap_link();
+      $ldap->cd($this->fdNetdiscoDeviceServiceDn);
       $ldap->search('(objectClass=fdNetdiscoServer)', ['fdNetdiscoServerURL','fdNetdiscoServerUser','fdNetdiscoServerPassword']);
       $attrs = $ldap->fetch();
 
