@@ -63,6 +63,7 @@ content :
     - './admin/systems/netdisco/class_netdiscoDevice.inc'
     - './admin/systems/netdisco/inventory.tpl'
     - './admin/systems/netdisco/class_netdiscoVlan.inc'
+    - './admin/systems/netdisco/class_netdiscoServerSelectAttribute.inc'
     - './include/netdisco/class_stackNetDiscoRenderer.inc'
     - './include/netdisco/class_netdisco.php'
     - './include/netdisco/class_netdiscoDataRenderer.php'
