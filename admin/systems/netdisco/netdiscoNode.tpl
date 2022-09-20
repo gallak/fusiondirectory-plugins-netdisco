@@ -1,7 +1,7 @@
 <div>
 
-{foreach $attributes.fdNetdiscoNodeServiceDn as $plop}
-{$plop}
+{foreach $attributes.fdNetdiscoNodeServiceDn as $netdiscoSrv}
+{$netdiscoSrv}
 {/foreach}
 
 
@@ -9,7 +9,7 @@
 {foreach $attributes.fdNetdiscoTrace as $macInfo}
 <div id="{$macInfo@key}" class="plugin-section">
 <span class="legend">
-        	{t}Mac address{/t} : {$macInfo@key}
+        	{t}Interface{/t} - {$macInfo@key}
 </span>
         {foreach $macInfo as $value}
 		<div>

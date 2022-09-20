@@ -53,13 +53,19 @@ class netdiscoNode extends simplePlugin
   {
     global $config;
     $this->connectNetdiscoServer();
-
-
     $arrayNodeInfo = array();
-    foreach ( $this->attrs['macAddress'] as $mac ){
+    $ldap = $config->get_ldap_link();
+    $ldap->cd($this->attrs['dn']);
+
+    $ldap->search('(objectClass=fdNetworkInterface)', ['cn','macAddress']);
+    $attrs = $ldap->fetch();
+
+    foreach ($attrs as $inet ){
+        $mac = $attrs['macAddress'][0];
+        $ifname = $attrs['cn'][0];
         $nodeInfo = $this->netdiscoHandler->getSearchNode(array('q'=> $mac));
         if ($nodeInfo) {
-            $arrayNodeInfo[$mac] = displayTable($nodeInfo,
+            $arrayNodeInfo[$ifname." (".$mac.")"] = displayTable($nodeInfo,
                                 array( 'ips' => array('time_last_stamp','time_first_stamp','ip','dns','oui'),
                                         'sightings' => array('time_last_stamp','time_first_stamp','switch','port','vlan'),
                                         'netbios'   => array('time_last_stamp','time_first_stamp','nbname','nbuser','domain','ip'),
