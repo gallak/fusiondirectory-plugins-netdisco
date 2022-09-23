@@ -23,7 +23,7 @@ support :
 requirement:
   fdVersion : 1.4
   phpVersion : 7.2.0
-  plugins: ['plugins-common']
+  plugins: ['pluginscommon']
 
 content :
   phpClassList :
