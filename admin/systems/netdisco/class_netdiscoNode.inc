@@ -58,9 +58,7 @@ class netdiscoNode extends simplePlugin
     $ldap->cd($this->attrs['dn']);
 
     $ldap->search('(objectClass=fdNetworkInterface)', ['cn','macAddress']);
-    $attrs = $ldap->fetch();
-
-    foreach ($attrs as $inet ){
+    while ($attrs = $ldap->fetch()){
         $mac = $attrs['macAddress'][0];
         $ifname = $attrs['cn'][0];
         $nodeInfo = $this->netdiscoHandler->getSearchNode(array('q'=> $mac));
