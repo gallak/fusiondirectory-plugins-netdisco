@@ -1,7 +1,32 @@
 <?php
 
-require_once("netdisco/restclient.php");
+//require_once("netdisco/restclient.php");
 
+
+function displayTablev1($data,$dict){
+
+    $netdiscoData = new netdiscoDataRenderer();
+    //$arrayDiv=array();
+    $smarty = get_smarty();
+    $item = array_key_first($dict);
+    $div = new divSelectBox('rows'.$item);
+    // set height depending values
+    $div->setHeight(count(array_keys($data)) * 26 + 40);
+    $headers=array();
+    foreach ($dict[$item] as $field) {
+        $headers[]=_($field);
+    }
+    $div->setHeaders($headers);
+
+    foreach ($data as &$record) {
+        $fields=array();
+        foreach ($dict[$item] as $field){
+            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$field] ,$record->$field)];
+        }
+        $div->addEntry($fields);
+    }
+    return $div->drawList();
+}
 
 function displayTable($data,$dict){
 
@@ -51,6 +76,7 @@ class netdisco_server {
   private $username = "";
   private $password = "";
   private $obj = "/object/device";
+  
 
   // constructeur
   public function __construct($server, $username, $password){
@@ -70,7 +96,8 @@ class netdisco_server {
     if ( $result->info->http_code == "200" ){
         $this->server_token = $result->decode_response()->api_key;
     }else{
-        print( "Error while getting token" );
+        msg_dialog::display(_('Error while getting tokenn'), "Error while getting token" ,INFO_DIALOG);
+        //print( "Error while getting token" );
     }
   }
 
