@@ -10,7 +10,8 @@ Briefly It's a tool that scan your network device switch/router to finding a nod
 It will provide some report :
 
 * vlan utilization
-* mismatch configuration 
+* mismatch configuration
+* subnet statistic
 ...
 
 It's very simple to use and install
@@ -38,11 +39,3 @@ With a plugin like netdisco. a real view is provided to FD user  like :
 This avoid to play "where is Waldo ?" when you want to find where is the computer with a specific macAddress, a simple request to netdisco and it's done
 
 
-## todo
-Netdisco Device
-
-add flag to request or not, VLAN an POWER info per equipement
-add info to allow other topology like 2 row per physical unit ( very depending to netdisco discovering method)
-add % of usage of utilisation port
-add different icons per type of port (rj45 / fiber ..)
-add remote port ( case interco)
