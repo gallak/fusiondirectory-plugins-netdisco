@@ -4,10 +4,7 @@
 */
 
 
-class stackNetdiscoRenderv2 {
-    //$stack=array();
-    //$type="";
-    //$orderedStack=array();
+class stackNetdiscoRender {
     
     function __construct($stack,$type){
         $this->stack = $stack;
@@ -15,11 +12,6 @@ class stackNetdiscoRenderv2 {
         $this->orderedStack =array();
     }
 
-
-    // type of switch repartition
-    //$typeArray=explode("-",$type);
-	//$nb_row = $typeArray[0];
-    //$firstPort= $typeArray[1];
 
     function renumberingStack(){
 
@@ -36,7 +28,6 @@ class stackNetdiscoRenderv2 {
                              [$value->fd['position']['module']]
                              [$value->fd['position']['port']]=$value;
         }
-        //var_dump($this->orderedStack);
         foreach ($this->orderedStack as $switch){
             foreach ($switch as $module){
                 // nb de port
@@ -58,25 +49,15 @@ class stackNetdiscoRenderv2 {
                     $finalOrderedStack[$port->fd['position']['switch']]
                                       [$port->fd['position']['module']]
                                       [$realY][$realX] = $port;
-                    
-                    //$this->orderedStack[$port->fd['position']['switch']]
-                    //                   [$port->fd['position']['module']]
-                    //                   [$port->fd['position']['port']]->fd['XY']=array("X"=>$realX,"Y" => $realY);
-                    
+                                       
                 }
                 
                 foreach ($finalOrderedStack[$port->fd['position']['switch']][$port->fd['position']['module']] as $k => $linev ){
                     ksort($finalOrderedStack[$port->fd['position']['switch']][$port->fd['position']['module']][$k]);
                 }
                 ksort($finalOrderedStack[$port->fd['position']['switch']][$port->fd['position']['module']]);
-               
-
-            }
-
-        // trier les tableau !!!            
+            }            
         }
-
-
         return($finalOrderedStack);
     }
 

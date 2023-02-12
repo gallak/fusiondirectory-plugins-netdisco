@@ -2,6 +2,7 @@
 /*
   This code is part of FusionDirectory (http://www.fusiondirectory.org/)
   Copyright (C) 2016-2017  FusionDirectory
+  Copyright (C) 2021-2023  Antoine Gallavardin
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -63,31 +64,19 @@ class netdiscoDevice extends simplePlugin
   }
 
   // translate topolgy keep only physical port
-  // could add more information 
-  //  - if slave_of is not null -> MLT
   public function translateTopology($object)
   {
     global $config;
     $ldap = $config->get_ldap_link();
 
-    // to put in globle config
-    //$physicalDef="/ethernetCsmacd/";
-//    $avayaDef="/^[0-9]+\.[0-9]+$/";  // <swicth>.<port>
-//    $ciscoDef="/^[a-zA-Z]{2}[0-9]+\/[0-9]+\/[0-9]+$/";  // Te<swictch>/<module>/<port>
-
-    $physicalDef = $this->physicalDef;
-    $interfacesDef = $this->interfacesDef;
-    
-    //var_dump($physicalDef);
-    //var_dump($interfacesDef);
     $fdDeviceTopology=array();
     foreach ($object as $record){
       $record = (array)$record;
-      if (preg_match($physicalDef,$record['type'])){
+      if (preg_match($this->physicalDef,$record['type'])){
         // clean All alphabetical
         $cleanPort=preg_replace("/[a-zA-Z]/",'',$record['port']);
         // loop for testing  intergface
-        foreach ($interfacesDef as $oneDef){
+        foreach ($this->interfacesDef as $oneDef){
             //var_dump($oneDef);
             $oneDefArray=preg_split("/;/",$oneDef);
             if (preg_match($oneDefArray[1],$cleanPort)){
@@ -106,6 +95,7 @@ class netdiscoDevice extends simplePlugin
         }
 
         // fetch addictionnal informations
+        //fetch Vlan member
         if ( isset($this->fdNetdiscoDeviceShowVlanMembership) && $this->fdNetdiscoDeviceShowVlanMembership == 'TRUE'){
           $netdiscoVlan= $this->netdiscoHandler->getDevicePortVlans($this->attrs['ipHostNumber'][0],$record['port']);
           $vlans = "";
@@ -120,10 +110,8 @@ class netdiscoDevice extends simplePlugin
           
         }
 
-        // fetch Remote
+        // fetch Remote Device and direct link inside Fusion
         if (isset($record['remote_id']) && isset($record['remote_port']) ){
-          
-          //var_dump($record['remote_id']);
           $ldap->cd($config->current['BASE']);
           $fields=array('cn','description');
           $ldap->search('(&(objectClass=ipHost)(macAddress='.$record['remote_id'].'))', $fields );
@@ -132,6 +120,7 @@ class netdiscoDevice extends simplePlugin
             foreach ($fields as $k ){
               $record['fd']['remote'][$k]=$attrs[$k][0];
             }
+
           $record['fd']['remote']['link']=htmlspecialchars('main.php?plug='.$_GET['plug'].'&reset=1&act=listing_edit&dn='.$attrs['dn']);
           $record['fd']['remote']['port']=$attrs['cn'][0]." - ".$record['remote_port'];
           }
@@ -143,6 +132,7 @@ class netdiscoDevice extends simplePlugin
         }
         
         $fdDeviceTopology[]=(object)$record;
+        var_dump($record);
       }
     }
 
@@ -154,41 +144,13 @@ class netdiscoDevice extends simplePlugin
   public function refreshAndGetTopology ()
   {
       $this->getMainInfo();
-      //get all info from netdisc
+      //get all info from netdisco
       $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
       // translate topology ( physical position / and other information)
       $deviceTopology=$this->translateTopology($deviceTopology);
-            
-      $test=new stackNetdiscoRenderv2($deviceTopology,$this->fdNetdiscoDeviceType);
+      // Add information for creating real position for drawing switch
+      $test=new stackNetdiscoRender($deviceTopology,$this->fdNetdiscoDeviceType);
       $this->fdNetdiscoTopology=(array)$test->renumberingStack();
-  }
-
-
-
-
-  // increase information per port ( power / vlan )
-  private function setupDeviceTopology($deviceTopology){
-        $orderedStack=array();
-        foreach ($deviceTopology as $record){
-          
-          $swNumber=$record->fd['position']['switch'];
-          $portNumber=$record->fd['position']['port'];
-
-            $orderedStack[$swNumber - 1][$portNumber -1]['summary'] = $record;
-            if ( isset($this->fdNetdiscoDeviceShowVlanMembership) && $this->fdNetdiscoDeviceShowVlanMembership == 'TRUE'){
-                $netdiscoVlan= $this->netdiscoHandler->getDevicePortVlans($this->attrs['ipHostNumber'][0],$record->port);
-                $vlans = "";
-                foreach ($netdiscoVlan as $value){
-                    $vlans = $vlans." ".$value->description." (".$value->vlan.")";
-                }
-                $orderedStack[$swNumber - 1][$portNumber -1]['vlan'] = $vlans;
-            }
-            if ( isset($this->fdNetdiscoDeviceShowPower) && $this->fdNetdiscoDeviceShowPower == 'TRUE'){
-                $orderedStack[$swNumber - 1][$portNumber -1]['power'] = $this->netdiscoHandler->getDevicePortPower($this->attrs['ipHostNumber'][0],$record->port);
-            }
-        }
-   //var_dump($orderedStack);
-    return($orderedStack);
   }
 
 
@@ -251,7 +213,7 @@ class netdiscoDevice extends simplePlugin
     parent::__construct($dn, $object, $parent, $mainTab);
     if (isset($this->attrs['fdNetdiscoDeviceServiceDn'])){
         $currentServer=$this->attrs['fdNetdiscoDeviceServiceDn'];
-	$this->getMainInfo();
+	      $this->getMainInfo();
         }
     $this->ignore_account = FALSE;
   }
