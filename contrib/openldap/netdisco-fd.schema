@@ -57,12 +57,27 @@ attributetype ( 1.3.6.1.4.1.38414.125.1.8 NAME 'fdNetdiscoDeviceServiceDn'
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
         SINGLE-VALUE )
 
+attributetype ( 1.3.6.1.4.1.38414.125.1.9 NAME 'fdNetdiscoServerInterfaceDefinition'
+        DESC 'FusionDirectory - Regexp used for getting all network interface name'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+        )
+
+attributetype ( 1.3.6.1.4.1.38414.125.1.10 NAME 'fdNetdiscoServerDeviceDefinition'
+        DESC 'FusionDirectory - Regexp used for getting all physical network interface'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26
+        SINGLE-VALUE )
+
+
 # Object Class
 objectclass (1.3.6.1.4.1.38414.125.2.1 NAME 'fdNetdiscoServer'
         SUP top AUXILIARY
         DESC 'FusionDirectory - Netdisco server'
         MUST ( fdNetdiscoServerURL )
-        MAY ( fdNetdiscoServerUser $ fdNetdiscoServerPassword ))
+        MAY ( fdNetdiscoServerUser $ fdNetdiscoServerPassword $ fdNetdiscoServerInterfaceDefinition $ fdNetdiscoServerDeviceDefinition))
 
 objectclass (1.3.6.1.4.1.38414.125.2.2 NAME 'fdNetdiscoDevice'
         SUP top AUXILIARY

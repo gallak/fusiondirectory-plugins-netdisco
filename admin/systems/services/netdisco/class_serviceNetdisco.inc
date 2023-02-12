@@ -56,6 +56,33 @@ class serviceNetdisco extends simpleService
           )
         ]
       ],
+      'device' => [
+        'name'  => _('Devices definition'),
+        'attrs' => [
+          new StringAttribute(
+            _('PhysicalDevices'), _('Regexp for detecting physical Device'),
+            'fdNetdiscoServerDeviceDefinition', TRUE
+          ),
+          new OrderedArrayAttribute(
+            new CharSeparatedCompositeAttribute(
+              _("beware, all letter are remove before computing real position, please take care of it for regexp"), //_('interface Definition'),
+              'fdNetdiscoServerInterfaceDefinition',
+                [
+                  new StringAttribute (_('Description'),    _('constructor / Model / example'), 'constructorDevice'),
+                  new StringAttribute (_('Interface Detection'), _('Regexp for matching interface name'),  'regexpDevice'),
+                  new StringAttribute (_('Name interface builder'), _('Regexp for keeping device position'),  'printfDevice'),
+                ],
+              ';',
+              '',
+              _('Interface Definition'),
+              
+            ),
+            FALSE,
+            [],
+            TRUE
+          ),
+        ]
+      ],
     ];
   }
 }
