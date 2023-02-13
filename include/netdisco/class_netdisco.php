@@ -1,32 +1,8 @@
 <?php
+/*
+ Copyright (C) 2021-2023  Antoine Gallavardin
+*/
 
-//require_once("netdisco/restclient.php");
-
-
-function displayTablev1($data,$dict){
-
-    $netdiscoData = new netdiscoDataRenderer();
-    //$arrayDiv=array();
-    $smarty = get_smarty();
-    $item = array_key_first($dict);
-    $div = new divSelectBox('rows'.$item);
-    // set height depending values
-    $div->setHeight(count(array_keys($data)) * 26 + 40);
-    $headers=array();
-    foreach ($dict[$item] as $field) {
-        $headers[]=_($field);
-    }
-    $div->setHeaders($headers);
-
-    foreach ($data as &$record) {
-        $fields=array();
-        foreach ($dict[$item] as $field){
-            $fields[]=[ 'string' => $netdiscoData->getRenderValue($netdiscoData->getOutputType($item)[$field] ,$record->$field)];
-        }
-        $div->addEntry($fields);
-    }
-    return $div->drawList();
-}
 
 function displayTable($data,$dict){
 
