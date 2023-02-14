@@ -33,6 +33,7 @@ class netdiscoDevice extends simplePlugin
   protected $loaded = TRUE;
   public $physicalDef = "/ethernetCsmacd/";
   public $interfacesDef = [];
+  public $portsColors =[];
 
   var $objectclasses = array('fdNetdiscoDevice');
 
@@ -132,7 +133,7 @@ class netdiscoDevice extends simplePlugin
         }
         
         $fdDeviceTopology[]=(object)$record;
-        var_dump($record);
+        //var_dump($record);
       }
     }
 
@@ -149,8 +150,10 @@ class netdiscoDevice extends simplePlugin
       // translate topology ( physical position / and other information)
       $deviceTopology=$this->translateTopology($deviceTopology);
       // Add information for creating real position for drawing switch
-      $test=new stackNetdiscoRender($deviceTopology,$this->fdNetdiscoDeviceType);
-      $this->fdNetdiscoTopology=(array)$test->renumberingStack();
+      $stack=new stackNetdiscoRender($deviceTopology,$this->fdNetdiscoDeviceType);
+      $this->fdNetdiscoTopology=(array)$stack->renumberingStack();
+     
+      
   }
 
 
@@ -185,7 +188,15 @@ class netdiscoDevice extends simplePlugin
             ],
           'template' => get_template_path('netdiscoDeviceInfo.tpl', TRUE, dirname(__FILE__)),
           ],
-
+      'topology' => [
+        'class' => ['fullwidth'],
+        'name'  => _('Device topology'),
+        'attrs' => [
+            new FakeAttribute('fdNetdiscoServerPortsColors'),
+            new FakeAttribute('fdNetdiscoTopology'), 
+            ],
+         'template' => get_template_path('netdiscoDevice.tpl', TRUE, dirname(__FILE__)),
+          ],
       'detailsIps' => [
         'class' => ['fullwidth'],
         'name'  => _('Device Ips'),
@@ -195,14 +206,7 @@ class netdiscoDevice extends simplePlugin
           'template' => get_template_path('netdiscoDeviceInfoIp.tpl', TRUE, dirname(__FILE__)),
           ],
 
-      'topology' => [
-        'class' => ['fullwidth'],
-        'name'  => _('Device topology'),
-        'attrs' => [
-             new FakeAttribute('fdNetdiscoTopology'), 
-            ],
-          'template' => get_template_path('netdiscoDevice.tpl', TRUE, dirname(__FILE__)),
-          ],
+
         ];
   }
 
@@ -218,6 +222,18 @@ class netdiscoDevice extends simplePlugin
     $this->ignore_account = FALSE;
   }
 
+  public function makeLegend() :array
+  {
+    $palette=[];
+    foreach ($this->portsColors as $color){
+      $values=preg_split("/;/",$color);
+      $palette[$values[1]][$values[2]] = array("description"=> $values[0], "color" => $values[3]);
+    }
+
+    array_shift($palette);
+    return($palette);
+  }
+
 
 
   function connectNetdiscoServer() {
@@ -226,7 +242,7 @@ class netdiscoDevice extends simplePlugin
 
       $ldap = $config->get_ldap_link();
       $ldap->cd($this->fdNetdiscoDeviceServiceDn);
-      $ldap->search('(objectClass=fdNetdiscoServer)', ['fdNetdiscoServerURL','fdNetdiscoServerUser','fdNetdiscoServerPassword','fdNetdiscoServerDeviceDefinition','fdNetdiscoServerInterfaceDefinition']);
+      $ldap->search('(objectClass=fdNetdiscoServer)', ['fdNetdiscoServerURL','fdNetdiscoServerUser','fdNetdiscoServerPassword','fdNetdiscoServerDeviceDefinition','fdNetdiscoServerInterfaceDefinition','fdNetdiscoServerPortsColors']);
 
 
       $attrs = $ldap->fetch();
@@ -236,8 +252,10 @@ class netdiscoDevice extends simplePlugin
       $uPass   = $attrs['fdNetdiscoServerPassword'][0];
       $this->physicalDef = $attrs['fdNetdiscoServerDeviceDefinition'][0];
       $this->interfacesDef = $attrs['fdNetdiscoServerInterfaceDefinition'];
-
-
+      $this->portsColors=$attrs['fdNetdiscoServerPortsColors'];
+      $this->fdNetdiscoServerPortsColors=$this->makeLegend();
+      //var_dump($this->portsColors);
+      //var_dump($this->makePalette());
       $this->netdiscoHandler = new netdisco_server($uServer,$uUser,$uPass);
       return($this->netdiscoHandler->doLogin());
 

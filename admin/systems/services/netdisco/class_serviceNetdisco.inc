@@ -59,6 +59,7 @@ class serviceNetdisco extends simpleService
       ],
       'device' => [
         'name'  => _('Devices definition'),
+        'class' => ['fullwidth'],
         'attrs' => [
           new StringAttribute(
             _('PhysicalDevices'), _('Regexp for detecting physical Device'),
@@ -66,7 +67,7 @@ class serviceNetdisco extends simpleService
           ),
           new OrderedArrayAttribute(
             new CharSeparatedCompositeAttribute(
-              _("beware, all letter are remove before computing real position, please take care of it for regexp"), //_('interface Definition'),
+              _("beware, all letter are remove before computing real position, please take care of it for regexp"), 
               'fdNetdiscoServerInterfaceDefinition',
                 [
                   new StringAttribute (_('Description'),    _('constructor / Model / example'), 'constructorDevice'),
@@ -82,6 +83,43 @@ class serviceNetdisco extends simpleService
             [],
             TRUE
           ),
+        ],
+      ],
+      'Colors' => [
+        'name'  => _('Color definition'),
+        'class' => ['fullwidth'],
+        'attrs' => [
+        new OrderedArrayAttribute(
+          new CharSeparatedCompositeAttribute(
+            _("Values depending of Netdisco output"),
+            'fdNetdiscoServerPortsColors',
+              [
+                new StringAttribute (_('Description'),    _('Description'), 'DescriptionVariable'),
+                new StringAttribute (_('Netdisco Variable'), _('Netdisco Variable to test'),  'NetdiscoVariable'),
+                new StringAttribute (_('Netdisco Values'), _('Netdisco Values'),  'NetdiscoValues'),
+                new StringAttribute (_('RGB Color'), _('RGB Color'),  'NetdiscoColor'),
+              ],
+            ';',
+            '',
+            _('Interface Design'),
+            
+          ),
+          FALSE,
+          [
+            "full-duplex;duplex;full;#006699",
+            "half-duplex;duplex;half;#33CCCC",
+            "SpanningTree activated;stp;enable;#9933ff",
+            "SpanningTree disabled;stp;disabled;#99ccff",
+            "Link Down;up;down;#908E89",
+            "Link Up;up;up;#00CC00",
+            "Trunk MLT;slave_of;%notempty%;#CC0099",
+            "Speed 10 M;speed;10 Mps;#FF0000",
+            "Speed 100 M;speed;100 Mps;#FFCC00",
+            "Speed 1G;speed;1.0 Gbps;#FF9933",
+            "Speed 10G;speed;10 Gbps;#FF6600",
+          ],
+          TRUE
+        ),
         ]
       ],
     ];
