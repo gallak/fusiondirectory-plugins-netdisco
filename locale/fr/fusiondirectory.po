@@ -108,7 +108,7 @@ msgid "server"
 msgstr "Serveur"
 
 msgid "slave_of"
-msgstr "Port secondaire"
+msgstr "port Trunk"
 
 msgid "speed"
 msgstr "Vitesse"
@@ -117,7 +117,7 @@ msgid "speed_admin"
 msgstr "Vitesse forcée"
 
 msgid "stp"
-msgstr "STP???"
+msgstr "Spannint tree"
 
 msgid "subnet"
 msgstr "Sous réseau"
@@ -144,7 +144,7 @@ msgid "type"
 msgstr "Type"
 
 msgid "up"
-msgstr "UP(??)"
+msgstr "Liens"
 
 msgid "up_admin"
 msgstr "UP admin (??)"
@@ -253,3 +253,9 @@ msgstr "nb ports"
 
 msgid "wireless"
 msgstr "Information Sans fils"
+
+msgid "Legend of colours"
+msgstr "Légende des couleurs"
+
+msgid "Simple representation"
+msgstr "Réprésentation simpliste"
