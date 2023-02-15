@@ -120,9 +120,6 @@ class netdiscoNode extends simplePlugin
 
       $ldap = $config->get_ldap_link();
       $ldap->cd($this->fdNetdiscoNodeServiceDn);
-
-      var_dump($this->fdNetdiscoNodeServiceDn);
-
       $ldap->search('(objectClass=fdNetdiscoServer)', ['fdNetdiscoServerURL','fdNetdiscoServerUser','fdNetdiscoServerPassword']);
       $attrs = $ldap->fetch();
 
