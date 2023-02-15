@@ -10,6 +10,7 @@
         <tbody>
         <tr style="border: 1px solid black;">
         {foreach from=$attributes.fdNetdiscoServerPortsColors key=type item=variables}
+            <td>{t}{$type}{/t}</td>
             {foreach from=$variables key=value item=info}
                 <td style="background-color: {$info['color']}; color: {$info['color']}">__</td>
                 <td style="color: {$info['color']};">{$info['description']}</td>
