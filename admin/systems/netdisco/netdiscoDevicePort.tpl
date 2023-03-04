@@ -34,8 +34,15 @@
   <rect rx="2" stroke-width="1" id="ledRight" height="20" width="30" y="85" x="125" stroke="#444444" fill="{$attributes.fdNetdiscoServerPortsColors['speed'][$data->speed]["color"]}"/>
 
   <!-- up / down -->>
-  <rect stroke-width="1" rx="2" id="plug" height="50" width="120" y="20" x="20" stroke="#444444" fill="{$attributes.fdNetdiscoServerPortsColors['up'][$data->up]["color"]}"/>
-  
+  {if isset($data->fd['highlight'])}
+    {if $data->fd['highlight'] == "yes"}
+      <rect stroke-width="1" rx="2" id="plug" height="50" width="120" y="20" x="20" stroke="#444444" fill="{$attributes.fdNetdiscoServerPortsColors['highlight']['selected']["color"]}"/>
+    {else}
+      <rect stroke-width="1" rx="2" id="plug" height="50" width="120" y="20" x="20" stroke="#444444" fill="{$attributes.fdNetdiscoServerPortsColors['highlight']['unselected']["color"]}"/>
+    {/if}
+  {else}
+      <rect stroke-width="1" rx="2" id="plug" height="50" width="120" y="20" x="20" stroke="#444444" fill="{$attributes.fdNetdiscoServerPortsColors['up'][$data->up]["color"]}"/>
+  {/if}
     <!-- if power -->
   {if $data->fd['power'] > 0}
   <text font-style="normal" font-weight="bold" xml:space="preserve" text-anchor="start" font-family="sans-serif" font-size="50" stroke-width="0" id="svg_8" y="63" x="61" stroke="#000" fill="#FF0000">P</text>

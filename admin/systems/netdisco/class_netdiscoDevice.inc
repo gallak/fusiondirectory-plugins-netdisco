@@ -23,6 +23,48 @@
 require_once("netdisco/class_netdisco.php");
 require_once("netdisco/class_netdiscoDataRenderer.php");
 
+class vlanSelectAttribute extends SelectAttribute
+{
+  public function getAllVlans()
+    {
+    global $config;
+    $ldap = $config->get_ldap_link();
+    
+    $allVlans=array();
+    $ldap->cd($config->current['BASE']);
+    $ldap->search('(objectClass=fdIpamVlan)', ['cn','fdIpamVlanInnerId','fdIpamActive']);
+    while ($vlan = $ldap->fetch()) {
+        $allVlans[$vlan['fdIpamVlanInnerId'][0]]= array( 'vlanID' => $vlan['fdIpamVlanInnerId'][0],
+                                       'vlanDescription' => $vlan['cn'][0]." (".$vlan['fdIpamVlanInnerId'][0].")",
+                                        );
+        }
+    return($allVlans);
+  }
+
+
+    function setParent (&$plugin)
+    {
+        parent::setParent($plugin);
+        if (is_object($this->plugin)) {
+            $this->updateChoices();
+        }
+    }
+
+    function updateChoices ()
+    {
+        global $config;
+        $vlansId    = [];
+        $vlansDescription = [];
+        foreach ($this->getAllVlans() as $name => $content){
+            $vlansDescription[] = $content['vlanDescription'];
+            $vlansId[] = $name;
+        }
+    $this->setChoices($vlansId, $vlansDescription);
+    }
+
+}
+
+
 
 class netdiscoDevice extends simplePlugin
 {
@@ -95,6 +137,9 @@ class netdiscoDevice extends simplePlugin
 
         }
 
+
+
+
         // fetch addictionnal informations
         //fetch Vlan member
         if ( isset($this->fdNetdiscoDeviceShowVlanMembership) && $this->fdNetdiscoDeviceShowVlanMembership == 'TRUE'){
@@ -102,7 +147,8 @@ class netdiscoDevice extends simplePlugin
           $vlans = "";
           foreach ($netdiscoVlan as $value){
               $vlans = $vlans." ".$value->description." (".$value->vlan.")";
-          }
+              $record['fd']['vlanList'][]=$value->vlan;
+            }
           $record['fd']['vlans']=$vlans;
         }
         // fetch Power Consumption
@@ -132,8 +178,33 @@ class netdiscoDevice extends simplePlugin
           $record['fd']['type']="TRUNK";
         }
         
-        $fdDeviceTopology[]=(object)$record;
+        // highlight Vlan
+
+        if ($this->fdNetdiscoFakeHighlightVlan != ''){
+          //var_dump($this->fdNetdiscoFakeHighlightVlan);
+          //var_dump($this->fdNetdiscoFakeHighlightType);
+          //var_dump($record['fd']['vlanList']);
+          switch ($this->fdNetdiscoFakeHighlightType) {
+            case 'pvid':
+              $arrayHL= [$record['pvid']];
+              break;
+            case 'members' :
+              //var_dump("test des memebres vlman");
+              $arrayHL= $record['fd']['vlanList'];
+              break;
+          }
+          //var_dump($arrayHL);
+          if ( in_array($this->fdNetdiscoFakeHighlightVlan,$arrayHL)){
+            $record['fd']['highlight']="yes";
+          }else{
+            $record['fd']['highlight']="no";
+          }
+          $arrayHL=array();
+        }
         //var_dump($record);
+
+        $fdDeviceTopology[]=(object)$record;
+        
       }
     }
 
@@ -152,8 +223,6 @@ class netdiscoDevice extends simplePlugin
       // Add information for creating real position for drawing switch
       $stack=new stackNetdiscoRender($deviceTopology,$this->fdNetdiscoDeviceType);
       $this->fdNetdiscoTopology=(array)$stack->renumberingStack();
-     
-      
   }
 
 
@@ -174,6 +243,14 @@ class netdiscoDevice extends simplePlugin
                  'fdNetdiscoDeviceShowPower',FALSE,FALSE),
              new BooleanAttribute(_('Show Vlan Membership'), _('Show Vlan which this ports is belong to'),
                  'fdNetdiscoDeviceShowVlanMembership',FALSE,FALSE),
+             new vlanSelectAttribute(
+                  _('Vlan to highlight'), _('Vlan High Light'),
+                  'fdNetdiscoFakeHighlightVlan', FALSE),
+              new SelectAttribute(_('PVID or member'),_('Which vlan should be highlighted'),
+                  'fdNetdiscoFakeHighlightType',TRUE,
+                  array('pvid','members'),'pvid',
+                  array('PVID','vlan members'),
+                  ),
              new ButtonAttribute(_('Fetch Informations'), _('Fetch informations'),
               'fdNetdiscoUpdate', _('Fetch'),'refreshAndGetTopology'
            ),
@@ -215,6 +292,9 @@ class netdiscoDevice extends simplePlugin
   {
     global $config;
     parent::__construct($dn, $object, $parent, $mainTab);
+    $this->attributesAccess['fdNetdiscoFakeHighlightVlan']->setInLdap(FALSE);
+    $this->attributesAccess['fdNetdiscoFakeHighlightType']->setInLdap(FALSE);
+    
     if (isset($this->attrs['fdNetdiscoDeviceServiceDn'])){
         $currentServer=$this->attrs['fdNetdiscoDeviceServiceDn'];
 	      $this->getMainInfo();
