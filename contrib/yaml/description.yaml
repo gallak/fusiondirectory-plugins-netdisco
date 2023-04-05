@@ -5,9 +5,12 @@ information :
   authors : ['antoine.gallavardin@free.fr']
   status : "development"
   screenshotUrl:
-   - https://github.com/gallak/fusiondirectory-plugins-netdisco/icon.png
-  logoUrl : "https://github.com/gallak/fusiondirectory-plugins-netdisco/logo.png"
-  tags : ["admin","network","plugin","api" ]
+   - "https://github.com/gallak/fusiondirectory-plugins-netdisco/raw/main/docs/netdisco-device.png"
+   - "https://raw.githubusercontent.com/gallak/fusiondirectory-plugins-netdisco/main/docs/netdisco-ipam.png"
+   - "https://raw.githubusercontent.com/gallak/fusiondirectory-plugins-netdisco/main/docs/netdisco-ipam.png"
+   - "https://raw.githubusercontent.com/gallak/fusiondirectory-plugins-netdisco/main/docs/netdisco-config.png"
+  logoUrl : "https://raw.githubusercontent.com/gallak/fusiondirectory-plugins-netdisco/main/html/themes/breezy/icons/16/apps/netdisco.png"
+  tags : ["admin","network","plugin","api","netdisco","reporting","snmp"]
   license : "GPLv2"
   origin : "source"
 
@@ -23,7 +26,6 @@ support :
 requirement:
   fdVersion : 1.4
   phpVersion : 7.2.0
-  plugins: ['pluginscommon']
 
 content :
   phpClassList :
@@ -46,24 +48,37 @@ content :
     - 'fdNetdiscoDeviceShowPower'
     - 'fdNetdiscoDeviceType'
   fileList :
-  - './contrib/openldap/netdisco-fd.schema'
-  - './locale/fr/fusiondirectory.po'
-  - './locale/en/fusiondirectory.po'
-  - './html/themes/breezy/icons/16/apps/netdisco.png'
-  - './admin/systems/services/netdisco/class_serviceNetdisco.inc'
-  - './admin/systems/netdisco/netdiscoDevice.tpl'
-  - './admin/systems/netdisco/class_netdiscoRangeIP.inc'
-  - './admin/systems/netdisco/netdiscoSubnet.tpl'
-  - './admin/systems/netdisco/netdiscoDeviceInfoIp.tpl'
-  - './admin/systems/netdisco/netdiscoDeviceInfo.tpl'
-  - './admin/systems/netdisco/netdiscoDevicePort.tpl'
-  - './admin/systems/netdisco/netdiscoVlan.tpl'
-  - './admin/systems/netdisco/netdiscoRangeIP.tpl'
-  - './admin/systems/netdisco/class_netdiscoNode.inc'
-  - './admin/systems/netdisco/netdiscoNode.tpl'
-  - './admin/systems/netdisco/class_netdiscoDevice.inc'
-  - './admin/systems/netdisco/inventory.tpl'
-  - './admin/systems/netdisco/class_netdiscoVlan.inc'
-  - './include/netdisco/class_stackNetDiscoRenderer.inc'
-  - './include/netdisco/class_netdisco.php'
-  - './include/netdisco/class_netdiscoDataRenderer.php'
+    - './admin/systems/services/netdisco/class_serviceNetdisco.inc'
+    - './admin/systems/netdisco/port.init'
+    - './admin/systems/netdisco/netdiscoRangeIP.tpl'
+    - './admin/systems/netdisco/class_netdiscoDevice.inc'
+    - './admin/systems/netdisco/netdiscoSubnet.tpl'
+    - './admin/systems/netdisco/class_netdiscoServerSelectAttribute.inc'
+    - './admin/systems/netdisco/netdiscoVlan.tpl'
+    - './admin/systems/netdisco/class_netdiscoRangeIP.inc'
+    - './admin/systems/netdisco/netdiscoDeviceInfo.tpl'
+    - './admin/systems/netdisco/netdiscoDevice.tpl'
+    - './admin/systems/netdisco/netdiscoDevicePort-old.tpl'
+    - './admin/systems/netdisco/netdiscoNode.tpl'
+    - './admin/systems/netdisco/class_netdiscoNode.inc'
+    - './admin/systems/netdisco/inventory.tpl'
+    - './admin/systems/netdisco/netdiscoDevicePort.tpl'
+    - './admin/systems/netdisco/class_netdiscoVlan.inc'
+    - './admin/systems/netdisco/netdiscoDeviceInfoIp.tpl'
+    - './admin/systems/netdisco/netdiscoDevice-old.tpl'
+    - './LICENSE'
+    - './include/test.php'
+    - './include/netdisco/class_netdisco.php'
+    - './include/netdisco/class_netdiscoDataRenderer.bak'
+    - './include/netdisco/class_stackNetDiscoRenderer.inc'
+    - './include/netdisco/restclient.php'
+    - './include/netdisco/class_netdiscoDataRenderer.php'
+    - './README.md'
+    - './docs/netdisco-ipam.png'
+    - './docs/netdisco-device.png'
+    - './docs/netdisco-node-info.png'
+    - './html/themes/breezy/icons/16/apps/netdisco.png'
+    - './locale/fr/fusiondirectory.po'
+    - './locale/en/fusiondirectory.po'
+    - './contrib/yaml/description.yaml'
+    - './contrib/openldap/netdisco-fd.schema'
