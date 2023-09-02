@@ -76,6 +76,8 @@ class netdiscoDevice extends simplePlugin
   public $physicalDef = "/ethernetCsmacd/";
   public $interfacesDef = [];
   public $portsColors =[];
+  public $managementInterface="mgmt";
+  public $managementIp="";
 
   var $objectclasses = array('fdNetdiscoDevice');
 
@@ -93,16 +95,27 @@ class netdiscoDevice extends simplePlugin
   }
 
 
+  public function getIpManagementInterface () {
+
+    global $config;
+    $ldap = $config->get_ldap_link();
+    $ldap->cd($this->dn);
+    $ldap->search('(&(objectClass=fdNetworkInterface)(cn='.$this->managementInterface.'))', ['ipHostNumber']);
+    $attrs = $ldap->fetch();
+    $this->managementIp=$attrs['ipHostNumber'][0];
+  }
+
 
   public function getMainInfo () {
     global $config;
     $this->connectNetdiscoServer();
+    $this->getIpManagementInterface();
     // get Info From device
     $smarty = get_smarty();
-    $deviceInfo = $this->netdiscoHandler->getDeviceInfo($this->attrs['ipHostNumber'][0]);
+    $deviceInfo = $this->netdiscoHandler->getDeviceInfo($this->managementIp);
     if (! is_null($deviceInfo)){
         $this->fdNetdiscoInfo=displayList($deviceInfo,array( 'deviceInfo' => array('description','serial','layers','uptime','mac','last_discover','last_macsuck','last_arpnip','creation')));
-        $this->fdNetdiscoInfoIp=displayTable(array('ips' => $this->netdiscoHandler->getDeviceIpsDetails($this->attrs['ipHostNumber'][0])),array( 'ips'=> array('ip','alias','subnet','port','dns')));
+        $this->fdNetdiscoInfoIp=displayTable(array('ips' => $this->netdiscoHandler->getDeviceIpsDetails($this->managementIp)),array( 'ips'=> array('ip','alias','subnet','port','dns')));
     }
   }
 
@@ -143,7 +156,7 @@ class netdiscoDevice extends simplePlugin
         // fetch addictionnal informations
         //fetch Vlan member
         if ( isset($this->fdNetdiscoDeviceShowVlanMembership) && $this->fdNetdiscoDeviceShowVlanMembership == 'TRUE'){
-          $netdiscoVlan= $this->netdiscoHandler->getDevicePortVlans($this->attrs['ipHostNumber'][0],$record['port']);
+          $netdiscoVlan= $this->netdiscoHandler->getDevicePortVlans($this->managementIp,$record['port']);
           $vlans = "";
           foreach ($netdiscoVlan as $value){
               $vlans = $vlans." ".$value->description." (".$value->vlan.")";
@@ -153,7 +166,7 @@ class netdiscoDevice extends simplePlugin
         }
         // fetch Power Consumption
         if ( isset($this->fdNetdiscoDeviceShowPower) && $this->fdNetdiscoDeviceShowPower == 'TRUE'){
-          $record['fd']['power']=$this->netdiscoHandler->getDevicePortPower($this->attrs['ipHostNumber'][0],$record['port'])->power;
+          $record['fd']['power']=$this->netdiscoHandler->getDevicePortPower($this->managementIp,$record['port'])->power;
           
         }
 
@@ -181,19 +194,14 @@ class netdiscoDevice extends simplePlugin
         // highlight Vlan
 
         if ($this->fdNetdiscoFakeHighlightVlan != ''){
-          //var_dump($this->fdNetdiscoFakeHighlightVlan);
-          //var_dump($this->fdNetdiscoFakeHighlightType);
-          //var_dump($record['fd']['vlanList']);
           switch ($this->fdNetdiscoFakeHighlightType) {
             case 'pvid':
               $arrayHL= [$record['pvid']];
               break;
             case 'members' :
-              //var_dump("test des memebres vlman");
               $arrayHL= $record['fd']['vlanList'];
               break;
           }
-          //var_dump($arrayHL);
           if ( in_array($this->fdNetdiscoFakeHighlightVlan,$arrayHL)){
             $record['fd']['highlight']="yes";
           }else{
@@ -201,8 +209,6 @@ class netdiscoDevice extends simplePlugin
           }
           $arrayHL=array();
         }
-        //var_dump($record);
-
         $fdDeviceTopology[]=(object)$record;
         
       }
@@ -217,7 +223,7 @@ class netdiscoDevice extends simplePlugin
   {
       $this->getMainInfo();
       //get all info from netdisco
-      $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->attrs['ipHostNumber'][0]);
+      $deviceTopology = $this->netdiscoHandler->getDevicePorts($this->managementIp);
       // translate topology ( physical position / and other information)
       $deviceTopology=$this->translateTopology($deviceTopology);
       // Add information for creating real position for drawing switch
@@ -322,7 +328,7 @@ class netdiscoDevice extends simplePlugin
 
       $ldap = $config->get_ldap_link();
       $ldap->cd($this->fdNetdiscoDeviceServiceDn);
-      $ldap->search('(objectClass=fdNetdiscoServer)', ['fdNetdiscoServerURL','fdNetdiscoServerUser','fdNetdiscoServerPassword','fdNetdiscoServerDeviceDefinition','fdNetdiscoServerInterfaceDefinition','fdNetdiscoServerPortsColors']);
+      $ldap->search('(objectClass=fdNetdiscoServer)', ['fdNetdiscoDeviceManagementName','fdNetdiscoServerURL','fdNetdiscoServerUser','fdNetdiscoServerPassword','fdNetdiscoServerDeviceDefinition','fdNetdiscoServerInterfaceDefinition','fdNetdiscoServerPortsColors']);
 
 
       $attrs = $ldap->fetch();
@@ -334,11 +340,10 @@ class netdiscoDevice extends simplePlugin
       $this->interfacesDef = $attrs['fdNetdiscoServerInterfaceDefinition'];
       $this->portsColors=$attrs['fdNetdiscoServerPortsColors'];
       $this->fdNetdiscoServerPortsColors=$this->makeLegend();
-      //var_dump($this->portsColors);
-      //var_dump($this->makePalette());
+      $this->managementInterface=$attrs['fdNetdiscoDeviceManagementName'][0];
+
       $this->netdiscoHandler = new netdisco_server($uServer,$uUser,$uPass);
       return($this->netdiscoHandler->doLogin());
-
   }
 
 }

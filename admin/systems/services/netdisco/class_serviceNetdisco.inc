@@ -54,7 +54,11 @@ class serviceNetdisco extends simpleService
           new PasswordAttribute(
             _('Password'), _('Password to access netdisco server Rest API.'),
             'fdNetdiscoServerPassword', FALSE
-          )
+          ),
+          new StringAttribute(
+            _('Device Management Interface'), _('Interface name for device management'),
+            'fdNetdiscoDeviceManagementName', FALSE
+          ),          
         ]
       ],
       'device' => [
